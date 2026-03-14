@@ -60,4 +60,12 @@ interface HumanizerInterface
      * @return string
      */
     public function pluralize(int $quantity, string $singular, ?string $plural = null): string;
+
+    /**
+     * Convert a number into its written word form.
+     *
+     * @param int $number
+     * @return string
+     */
+    public function toWords(int $number): string;
 }

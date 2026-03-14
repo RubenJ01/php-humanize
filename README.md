@@ -34,6 +34,7 @@ $humanizer = new Humanizer();
 $humanizer->fileSize(5452595);                // "5.2 MB"
 $humanizer->ordinal(21);                      // "21st"
 $humanizer->abbreviate(2300000);              // "2.3M"
+$humanizer->toWords(42);                      // "forty-two"
 $humanizer->diffForHumans($fiveMinutesAgo);   // "5 minutes ago"
 $humanizer->pluralize(3, 'child', 'children');// "3 children"
 $humanizer->joinList(['A', 'B', 'C']);        // "A, B, and C"

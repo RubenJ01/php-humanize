@@ -251,4 +251,69 @@ class HumanizerTest extends TestCase
     {
         $this->assertEquals('-3 items', $this->humanizer->pluralize(-3, 'item'));
     }
+
+    // -- toWords --
+
+    public function testItConvertsZeroToWords(): void
+    {
+        $this->assertEquals('zero', $this->humanizer->toWords(0));
+    }
+
+    public function testItConvertsSingleDigitToWords(): void
+    {
+        $this->assertEquals('five', $this->humanizer->toWords(5));
+    }
+
+    public function testItConvertsTeenToWords(): void
+    {
+        $this->assertEquals('thirteen', $this->humanizer->toWords(13));
+    }
+
+    public function testItConvertsTensToWords(): void
+    {
+        $this->assertEquals('forty-two', $this->humanizer->toWords(42));
+    }
+
+    public function testItConvertsEvenTensToWords(): void
+    {
+        $this->assertEquals('twenty', $this->humanizer->toWords(20));
+    }
+
+    public function testItConvertsHundredsToWords(): void
+    {
+        $this->assertEquals('one hundred', $this->humanizer->toWords(100));
+    }
+
+    public function testItConvertsHundredsWithRemainderToWords(): void
+    {
+        $this->assertEquals('five hundred twelve', $this->humanizer->toWords(512));
+    }
+
+    public function testItConvertsThousandToWords(): void
+    {
+        $this->assertEquals('one thousand', $this->humanizer->toWords(1000));
+    }
+
+    public function testItConvertsThousandsWithRemainderToWords(): void
+    {
+        $this->assertEquals(
+            'one million, two hundred thirty-four thousand, five hundred sixty-seven',
+            $this->humanizer->toWords(1234567)
+        );
+    }
+
+    public function testItConvertsNegativeNumberToWords(): void
+    {
+        $this->assertEquals('negative forty-two', $this->humanizer->toWords(-42));
+    }
+
+    public function testItConvertsOneMillionToWords(): void
+    {
+        $this->assertEquals('one million', $this->humanizer->toWords(1000000));
+    }
+
+    public function testItConvertsOneBillionToWords(): void
+    {
+        $this->assertEquals('one billion', $this->humanizer->toWords(1000000000));
+    }
 }
