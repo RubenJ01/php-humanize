@@ -90,6 +90,28 @@ echo $humanizer->toWords(1234567);
 echo $humanizer->toWords(-42);
 ```
 
+## Duration Formatting
+
+Convert a number of seconds into a human-readable duration string:
+
+```php
+// Outputs: 1 minute, 30 seconds
+echo $humanizer->duration(90);
+
+// Outputs: 1 hour, 1 minute, 1 second
+echo $humanizer->duration(3661);
+
+// Outputs: 1 day
+echo $humanizer->duration(86400);
+
+// Limit the number of units shown with precision
+// Outputs: 1 hour
+echo $humanizer->duration(3661, 1);
+
+// Outputs: 1 hour, 1 minute
+echo $humanizer->duration(3661, 2);
+```
+
 ## Time Difference
 
 Express a datetime as a human-readable difference:

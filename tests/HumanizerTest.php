@@ -53,4 +53,9 @@ class HumanizerTest extends TestCase
     {
         $this->assertEquals('forty-two', $this->humanizer->toWords(42));
     }
+
+    public function testItDelegatesToDurationFormatter(): void
+    {
+        $this->assertEquals('1 hour, 1 minute, 1 second', $this->humanizer->duration(3661));
+    }
 }
