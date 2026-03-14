@@ -71,6 +71,25 @@ echo $humanizer->abbreviate(999);
 echo $humanizer->abbreviate(-1500);
 ```
 
+## Number to Words
+
+Convert a number into its written word form:
+
+```php
+// Outputs: forty-two
+echo $humanizer->toWords(42);
+
+// Outputs: one thousand
+echo $humanizer->toWords(1000);
+
+// Outputs: one million, two hundred thirty-four thousand, five hundred sixty-seven
+echo $humanizer->toWords(1234567);
+
+// Negative numbers are supported
+// Outputs: negative forty-two
+echo $humanizer->toWords(-42);
+```
+
 ## Time Difference
 
 Express a datetime as a human-readable difference:
