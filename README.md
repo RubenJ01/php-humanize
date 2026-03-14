@@ -1,7 +1,7 @@
 # PHP Humanize
 
 ![Version](https://img.shields.io/github/v/release/RubenJ01/php-humanize?label=version)
-[![codecov](https://codecov.io/github/RubenJ01/php-humanize/graph/badge.svg)](https://codecov.io/github/RubenJ01/php-humanize)
+[![codecov](https://codecov.io/github/RubenJ01/php-humanize/graph/badge.svg?token=RE8FQRMMCL)](https://codecov.io/github/RubenJ01/php-humanize)
 ![License](https://img.shields.io/github/license/RubenJ01/php-humanize)
 
 A PHP library to convert machine data into human-readable strings.
