@@ -1,5 +1,6 @@
 when:
-  - event: [pull_request, manual]
+  - event: [pull_request, push, manual]
+    branch: main
 
 steps:
   - name: test
@@ -15,4 +16,13 @@ steps:
       - echo "══════ PHPStan (Level 9) ══════"
       - vendor/bin/phpstan analyse --configuration=phpstan.neon --no-progress
       - echo "══════ PHPUnit ══════"
-      - vendor/bin/phpunit --colors=always
+      - pecl install pcov > /dev/null 2>&1 && docker-php-ext-enable pcov
+      - vendor/bin/phpunit --colors=always --coverage-clover=coverage.xml
+
+  - name: codecov
+    image: woodpeckerci/plugin-codecov
+    settings:
+      files:
+        - coverage.xml
+      token:
+        from_secret: codecov_token
