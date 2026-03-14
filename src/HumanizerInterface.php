@@ -68,4 +68,13 @@ interface HumanizerInterface
      * @return string
      */
     public function toWords(int $number): string;
+
+    /**
+     * Convert a number of seconds into a human-readable duration string.
+     *
+     * @param int $seconds
+     * @param int|null $precision
+     * @return string
+     */
+    public function duration(int $seconds, ?int $precision = null): string;
 }

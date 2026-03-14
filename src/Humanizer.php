@@ -4,6 +4,7 @@ namespace Rjds\PhpHumanize;
 
 use DateTimeInterface;
 use Rjds\PhpHumanize\Formatter\AbbreviationFormatter;
+use Rjds\PhpHumanize\Formatter\DurationFormatter;
 use Rjds\PhpHumanize\Formatter\FileSizeFormatter;
 use Rjds\PhpHumanize\Formatter\ListJoinFormatter;
 use Rjds\PhpHumanize\Formatter\NumberToWordsFormatter;
@@ -21,6 +22,7 @@ class Humanizer implements HumanizerInterface
         private readonly ListJoinFormatter $listJoinFormatter = new ListJoinFormatter(),
         private readonly PluralizeFormatter $pluralizeFormatter = new PluralizeFormatter(),
         private readonly NumberToWordsFormatter $numberToWordsFormatter = new NumberToWordsFormatter(),
+        private readonly DurationFormatter $durationFormatter = new DurationFormatter(),
     ) {
     }
 
@@ -60,5 +62,10 @@ class Humanizer implements HumanizerInterface
     public function toWords(int $number): string
     {
         return $this->numberToWordsFormatter->format($number);
+    }
+
+    public function duration(int $seconds, ?int $precision = null): string
+    {
+        return $this->durationFormatter->format($seconds, $precision);
     }
 }
