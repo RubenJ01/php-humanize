@@ -50,4 +50,14 @@ interface HumanizerInterface
      * @return string
      */
     public function joinList(array $items, string $conjunction = 'and', string $separator = ', '): string;
+
+    /**
+     * Convert a quantity and noun into a correctly pluralized string.
+     *
+     * @param int $quantity
+     * @param string $singular
+     * @param string|null $plural
+     * @return string
+     */
+    public function pluralize(int $quantity, string $singular, ?string $plural = null): string;
 }

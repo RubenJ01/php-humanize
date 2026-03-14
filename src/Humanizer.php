@@ -124,4 +124,15 @@ class Humanizer implements HumanizerInterface
 
         return implode($separator, $items) . $separator . $conjunction . ' ' . $last;
     }
+
+    public function pluralize(int $quantity, string $singular, ?string $plural = null): string
+    {
+        if ($quantity === 1) {
+            return $quantity . ' ' . $singular;
+        }
+
+        $pluralForm = $plural ?? $singular . 's';
+
+        return $quantity . ' ' . $pluralForm;
+    }
 }

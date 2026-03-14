@@ -214,4 +214,41 @@ class HumanizerTest extends TestCase
             $this->humanizer->joinList(['Alice', 'Bob', 'Charlie'], 'and', '; ')
         );
     }
+
+    // -- pluralize --
+
+    public function testItPluralizesSingularItem(): void
+    {
+        $this->assertEquals('1 item', $this->humanizer->pluralize(1, 'item'));
+    }
+
+    public function testItPluralizesMultipleItems(): void
+    {
+        $this->assertEquals('5 items', $this->humanizer->pluralize(5, 'item'));
+    }
+
+    public function testItPluralizesZeroItems(): void
+    {
+        $this->assertEquals('0 items', $this->humanizer->pluralize(0, 'item'));
+    }
+
+    public function testItPluralizesWithCustomPluralForm(): void
+    {
+        $this->assertEquals('3 children', $this->humanizer->pluralize(3, 'child', 'children'));
+    }
+
+    public function testItUsesSingularWithCustomPluralFormWhenOne(): void
+    {
+        $this->assertEquals('1 child', $this->humanizer->pluralize(1, 'child', 'children'));
+    }
+
+    public function testItPluralizesNegativeQuantity(): void
+    {
+        $this->assertEquals('-1 items', $this->humanizer->pluralize(-1, 'item'));
+    }
+
+    public function testItPluralizesNegativeMultipleQuantity(): void
+    {
+        $this->assertEquals('-3 items', $this->humanizer->pluralize(-3, 'item'));
+    }
 }

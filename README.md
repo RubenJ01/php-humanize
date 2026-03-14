@@ -24,120 +24,19 @@ Then require the package:
 composer require rjds/php-humanize
 ```
 
-## Usage
-
-Getting started with php-humanize is simple.
+## Overview
 
 ```php
 use Rjds\PhpHumanize\Humanizer;
 
 $humanizer = new Humanizer();
+
+$humanizer->fileSize(5452595);                // "5.2 MB"
+$humanizer->ordinal(21);                      // "21st"
+$humanizer->abbreviate(2300000);              // "2.3M"
+$humanizer->diffForHumans($fiveMinutesAgo);   // "5 minutes ago"
+$humanizer->pluralize(3, 'child', 'children');// "3 children"
+$humanizer->joinList(['A', 'B', 'C']);        // "A, B, and C"
 ```
 
-### File Size
-
-Convert bytes to a human-readable file size:
-
-```php
-// Outputs: 1.5 KB
-echo $humanizer->fileSize(1536);
-
-// Outputs: 5.2 MB
-echo $humanizer->fileSize(5452595);
-
-// Outputs: 2 GB
-echo $humanizer->fileSize(2147483648);
-
-// Custom precision
-// Outputs: 1.5 KB
-echo $humanizer->fileSize(1536, 2);
-```
-
-### Ordinals
-
-Convert a number to its ordinal form:
-
-```php
-// Outputs: 1st
-echo $humanizer->ordinal(1);
-
-// Outputs: 2nd
-echo $humanizer->ordinal(2);
-
-// Outputs: 3rd
-echo $humanizer->ordinal(3);
-
-// Outputs: 11th
-echo $humanizer->ordinal(11);
-
-// Outputs: 21st
-echo $humanizer->ordinal(21);
-```
-
-### Number Abbreviation
-
-Abbreviate large numbers to a short form:
-
-```php
-// Outputs: 1.5K
-echo $humanizer->abbreviate(1500);
-
-// Outputs: 2.3M
-echo $humanizer->abbreviate(2300000);
-
-// Outputs: 1B
-echo $humanizer->abbreviate(1000000000);
-
-// Small numbers are returned as-is
-// Outputs: 999
-echo $humanizer->abbreviate(999);
-
-// Negative numbers are supported
-// Outputs: -1.5K
-echo $humanizer->abbreviate(-1500);
-```
-
-### Time Difference
-
-Express a datetime as a human-readable difference:
-
-```php
-use DateTimeImmutable;
-
-$now = new DateTimeImmutable();
-
-// Outputs: 5 minutes ago
-echo $humanizer->diffForHumans($now->modify('-5 minutes'), $now);
-
-// Outputs: 3 hours ago
-echo $humanizer->diffForHumans($now->modify('-3 hours'), $now);
-
-// Outputs: 2 weeks ago
-echo $humanizer->diffForHumans($now->modify('-14 days'), $now);
-
-// Outputs: in 2 hours
-echo $humanizer->diffForHumans($now->modify('+2 hours'), $now);
-
-// Outputs: just now
-echo $humanizer->diffForHumans($now->modify('-10 seconds'), $now);
-```
-
-### List Joining
-
-Join an array of items into a natural-language list:
-
-```php
-// Outputs: Alice, Bob, and Charlie
-echo $humanizer->joinList(['Alice', 'Bob', 'Charlie']);
-
-// Outputs: Alice and Bob
-echo $humanizer->joinList(['Alice', 'Bob']);
-
-// Custom conjunction
-// Outputs: Alice or Bob
-echo $humanizer->joinList(['Alice', 'Bob'], 'or');
-
-// Custom separator
-// Outputs: Alice; Bob; and Charlie
-echo $humanizer->joinList(['Alice', 'Bob', 'Charlie'], 'and', '; ');
-```
+For detailed usage and all available options, see the [full documentation](docs/usage.md).
