@@ -1,0 +1,36 @@
+{
+    "name": "rjds/php-humanize",
+    "description": "A PHP library to convert machine data into human-readable strings.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Rjds\\PhpHumanize\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Rjds\\PhpHumanize\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Ruben Eekhof",
+            "email": "rubeneekhof@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.1"
+    },
+    "require-dev": {
+        "phpro/grumphp": "^2.19",
+        "phpunit/phpunit": "^13.0",
+        "squizlabs/php_codesniffer": "^4.0",
+        "phpstan/phpstan": "^2.1"
+    },
+    "config": {
+        "allow-plugins": {
+            "phpro/grumphp": true
+        }
+    }
+}

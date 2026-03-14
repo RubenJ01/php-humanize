@@ -1,0 +1,143 @@
+# PHP Humanize
+
+![Version](https://img.shields.io/github/v/release/RubenJ01/php-humanize?label=version)
+[![codecov](https://codecov.io/github/RubenJ01/php-humanize/graph/badge.svg)](https://codecov.io/github/RubenJ01/php-humanize)
+![License](https://img.shields.io/github/license/RubenJ01/php-humanize)
+
+A PHP library to convert machine data into human-readable strings.
+
+## Installation
+
+Add these lines to your composer.json file, or add a new repository URL if you already have one or more:
+
+```json
+{
+    "repositories": [
+        {"type": "composer", "url": "https://ruben-jakob-digital-solutions.repo.repman.rubenjakob.com"}
+    ]
+}
+```
+
+Then require the package:
+
+```bash
+composer require rjds/php-humanize
+```
+
+## Usage
+
+Getting started with php-humanize is simple.
+
+```php
+use Rjds\PhpHumanize\Humanizer;
+
+$humanizer = new Humanizer();
+```
+
+### File Size
+
+Convert bytes to a human-readable file size:
+
+```php
+// Outputs: 1.5 KB
+echo $humanizer->fileSize(1536);
+
+// Outputs: 5.2 MB
+echo $humanizer->fileSize(5452595);
+
+// Outputs: 2 GB
+echo $humanizer->fileSize(2147483648);
+
+// Custom precision
+// Outputs: 1.5 KB
+echo $humanizer->fileSize(1536, 2);
+```
+
+### Ordinals
+
+Convert a number to its ordinal form:
+
+```php
+// Outputs: 1st
+echo $humanizer->ordinal(1);
+
+// Outputs: 2nd
+echo $humanizer->ordinal(2);
+
+// Outputs: 3rd
+echo $humanizer->ordinal(3);
+
+// Outputs: 11th
+echo $humanizer->ordinal(11);
+
+// Outputs: 21st
+echo $humanizer->ordinal(21);
+```
+
+### Number Abbreviation
+
+Abbreviate large numbers to a short form:
+
+```php
+// Outputs: 1.5K
+echo $humanizer->abbreviate(1500);
+
+// Outputs: 2.3M
+echo $humanizer->abbreviate(2300000);
+
+// Outputs: 1B
+echo $humanizer->abbreviate(1000000000);
+
+// Small numbers are returned as-is
+// Outputs: 999
+echo $humanizer->abbreviate(999);
+
+// Negative numbers are supported
+// Outputs: -1.5K
+echo $humanizer->abbreviate(-1500);
+```
+
+### Time Difference
+
+Express a datetime as a human-readable difference:
+
+```php
+use DateTimeImmutable;
+
+$now = new DateTimeImmutable();
+
+// Outputs: 5 minutes ago
+echo $humanizer->diffForHumans($now->modify('-5 minutes'), $now);
+
+// Outputs: 3 hours ago
+echo $humanizer->diffForHumans($now->modify('-3 hours'), $now);
+
+// Outputs: 2 weeks ago
+echo $humanizer->diffForHumans($now->modify('-14 days'), $now);
+
+// Outputs: in 2 hours
+echo $humanizer->diffForHumans($now->modify('+2 hours'), $now);
+
+// Outputs: just now
+echo $humanizer->diffForHumans($now->modify('-10 seconds'), $now);
+```
+
+### List Joining
+
+Join an array of items into a natural-language list:
+
+```php
+// Outputs: Alice, Bob, and Charlie
+echo $humanizer->joinList(['Alice', 'Bob', 'Charlie']);
+
+// Outputs: Alice and Bob
+echo $humanizer->joinList(['Alice', 'Bob']);
+
+// Custom conjunction
+// Outputs: Alice or Bob
+echo $humanizer->joinList(['Alice', 'Bob'], 'or');
+
+// Custom separator
+// Outputs: Alice; Bob; and Charlie
+echo $humanizer->joinList(['Alice', 'Bob', 'Charlie'], 'and', '; ');
+```
