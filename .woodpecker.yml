@@ -18,6 +18,8 @@ steps:
       - echo "══════ PHPUnit ══════"
       - pecl install pcov > /dev/null 2>&1 && docker-php-ext-enable pcov
       - vendor/bin/phpunit --colors=always --coverage-clover=coverage.xml
+      - echo "Infection (Mutation Testing)"
+      - vendor/bin/infection --threads=4 --no-progress
 
   - name: codecov
     image: woodpeckerci/plugin-codecov

@@ -26,11 +26,13 @@
         "phpro/grumphp": "^2.19",
         "phpunit/phpunit": "^13.0",
         "squizlabs/php_codesniffer": "^4.0",
-        "phpstan/phpstan": "^2.1"
+        "phpstan/phpstan": "^2.1",
+        "infection/infection": "^0.32.6"
     },
     "config": {
         "allow-plugins": {
-            "phpro/grumphp": true
+            "phpro/grumphp": true,
+            "infection/extension-installer": true
         }
     }
 }
