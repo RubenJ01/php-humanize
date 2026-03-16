@@ -1,6 +1,5 @@
 when:
-  - event: [pull_request, push, manual]
-    branch: main
+  - event: [pull_request, manual]
 
 steps:
   - name: test
@@ -20,11 +19,3 @@ steps:
       - vendor/bin/phpunit --colors=always --coverage-clover=coverage.xml
       - echo "Infection (Mutation Testing)"
       - vendor/bin/infection --threads=4 --no-progress
-
-  - name: codecov
-    image: woodpeckerci/plugin-codecov
-    settings:
-      files:
-        - coverage.xml
-      token:
-        from_secret: codecov_token
