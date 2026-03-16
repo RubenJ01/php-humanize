@@ -1,5 +1,5 @@
 when:
-  - event: [pull_request, manual]
+  - event: [pull_request, push, manual]
 
 steps:
   - name: test
