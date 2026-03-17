@@ -29,6 +29,7 @@ class NumberToWordsFormatterTest extends TestCase
             'hundreds' => [100, 'one hundred'],
             'hundreds boundary before two hundred' => [199, 'one hundred ninety-nine'],
             'hundreds with remainder' => [512, 'five hundred twelve'],
+            'hundreds upper boundary' => [999, 'nine hundred ninety-nine'],
             'thousand' => [1000, 'one thousand'],
             'thousand with hundreds remainder' => [1100, 'one thousand, one hundred'],
             'large number' => [1234567, 'one million, two hundred thirty-four thousand, five hundred sixty-seven'],
