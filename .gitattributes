@@ -8,6 +8,7 @@
 *.yaml text eol=lf
 *.neon text eol=lf
 *.dist text eol=lf
+.gitmodules text eol=lf
 
 *.bat text eol=crlf
 *.ps1 text eol=crlf

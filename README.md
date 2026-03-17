@@ -42,7 +42,7 @@ $humanizer->pluralize(3, 'child', 'children');// "3 children"
 $humanizer->joinList(['A', 'B', 'C']);        // "A, B, and C"
 ```
 
-For detailed usage and all available options, see the [full documentation](docs/usage.md).
+For detailed usage and all available options, see the [GitHub Wiki](https://github.com/RubenJ01/php-humanize/wiki).
 
 ## Development
 
