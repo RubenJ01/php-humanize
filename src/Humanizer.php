@@ -4,6 +4,7 @@ namespace Rjds\PhpHumanize;
 
 use DateTimeInterface;
 use Rjds\PhpHumanize\Formatter\AbbreviationFormatter;
+use Rjds\PhpHumanize\Formatter\DataRateFormatter;
 use Rjds\PhpHumanize\Formatter\DurationFormatter;
 use Rjds\PhpHumanize\Formatter\FileSizeFormatter;
 use Rjds\PhpHumanize\Formatter\ListJoinFormatter;
@@ -16,6 +17,7 @@ class Humanizer implements HumanizerInterface
 {
     public function __construct(
         private readonly FileSizeFormatter $fileSizeFormatter = new FileSizeFormatter(),
+        private readonly DataRateFormatter $dataRateFormatter = new DataRateFormatter(),
         private readonly OrdinalFormatter $ordinalFormatter = new OrdinalFormatter(),
         private readonly AbbreviationFormatter $abbreviationFormatter = new AbbreviationFormatter(),
         private readonly TimeDiffFormatter $timeDiffFormatter = new TimeDiffFormatter(),
@@ -29,6 +31,11 @@ class Humanizer implements HumanizerInterface
     public function fileSize(int $bytes, int $precision = 1): string
     {
         return $this->fileSizeFormatter->format($bytes, $precision);
+    }
+
+    public function dataRate(int $bytesPerSecond, int $precision = 1): string
+    {
+        return $this->dataRateFormatter->format($bytesPerSecond, $precision);
     }
 
     public function ordinal(int $number): string

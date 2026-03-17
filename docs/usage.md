@@ -27,6 +27,25 @@ echo $humanizer->fileSize(2147483648);
 echo $humanizer->fileSize(1536, 2);
 ```
 
+## Data Rate
+
+Convert bytes per second to a human-readable data rate:
+
+```php
+// Outputs: 1.5 KB/s
+echo $humanizer->dataRate(1536);
+
+// Outputs: 1 MB/s
+echo $humanizer->dataRate(1048576);
+
+// Outputs: 1 GB/s
+echo $humanizer->dataRate(1073741824);
+
+// Custom precision
+// Outputs: 1.5625 KB/s
+echo $humanizer->dataRate(1600, 4);
+```
+
 ## Ordinals
 
 Convert a number to its ordinal form:

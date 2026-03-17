@@ -32,6 +32,7 @@ use Rjds\PhpHumanize\Humanizer;
 $humanizer = new Humanizer();
 
 $humanizer->fileSize(5452595);                // "5.2 MB"
+$humanizer->dataRate(1536);                   // "1.5 KB/s"
 $humanizer->ordinal(21);                      // "21st"
 $humanizer->abbreviate(2300000);              // "2.3M"
 $humanizer->toWords(42);                      // "forty-two"

@@ -16,6 +16,15 @@ interface HumanizerInterface
     public function fileSize(int $bytes, int $precision = 1): string;
 
     /**
+     * Convert bytes per second to a human-readable data rate.
+     *
+     * @param int $bytesPerSecond
+     * @param int $precision
+     * @return string
+     */
+    public function dataRate(int $bytesPerSecond, int $precision = 1): string;
+
+    /**
      * Convert a number to its ordinal form.
      *
      * @param int $number
