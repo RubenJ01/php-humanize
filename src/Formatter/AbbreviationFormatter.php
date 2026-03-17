@@ -23,6 +23,6 @@ class AbbreviationFormatter
             }
         }
 
-        return (string) $number;
+        return "{$number}";
     }
 }

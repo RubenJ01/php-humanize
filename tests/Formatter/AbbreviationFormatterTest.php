@@ -22,9 +22,11 @@ class AbbreviationFormatterTest extends TestCase
     {
         return [
             'thousands' => [1500, '1.5K'],
+            'default precision rounds to one decimal' => [1250, '1.3K'],
             'millions' => [2300000, '2.3M'],
             'billions' => [1000000000, '1B'],
             'small numbers unchanged' => [999, '999'],
+            'small float numbers keep decimals' => [999.5, '999.5'],
             'negative numbers' => [-1500, '-1.5K'],
         ];
     }
@@ -37,6 +39,6 @@ class AbbreviationFormatterTest extends TestCase
 
     public function testItAbbreviatesWithCustomPrecision(): void
     {
-        $this->assertEquals('1.5K', $this->formatter->format(1500, 2));
+        $this->assertEquals('1.25K', $this->formatter->format(1250, 2));
     }
 }
