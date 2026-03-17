@@ -21,6 +21,11 @@ class HumanizerTest extends TestCase
         $this->assertEquals('1.6 KB', $this->humanizer->fileSize(1600));
     }
 
+    public function testItDelegatesToDataRateFormatter(): void
+    {
+        $this->assertEquals('1.6 KB/s', $this->humanizer->dataRate(1600));
+    }
+
     public function testItDelegatesToOrdinalFormatter(): void
     {
         $this->assertEquals('1st', $this->humanizer->ordinal(1));
