@@ -18,7 +18,7 @@ class HumanizerTest extends TestCase
 
     public function testItDelegatesToFileSizeFormatter(): void
     {
-        $this->assertEquals('1.5 KB', $this->humanizer->fileSize(1536));
+        $this->assertEquals('1.6 KB', $this->humanizer->fileSize(1600));
     }
 
     public function testItDelegatesToOrdinalFormatter(): void
@@ -28,7 +28,7 @@ class HumanizerTest extends TestCase
 
     public function testItDelegatesToAbbreviationFormatter(): void
     {
-        $this->assertEquals('1.5K', $this->humanizer->abbreviate(1500));
+        $this->assertEquals('1.3K', $this->humanizer->abbreviate(1250));
     }
 
     public function testItDelegatesToTimeDiffFormatter(): void

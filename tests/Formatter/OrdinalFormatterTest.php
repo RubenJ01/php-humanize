@@ -29,6 +29,10 @@ class OrdinalFormatterTest extends TestCase
             'twelfth' => [12, '12th'],
             'thirteenth' => [13, '13th'],
             'twenty-first' => [21, '21st'],
+            'one hundred eleventh' => [111, '111th'],
+            'one hundred thirteenth' => [113, '113th'],
+            'one hundred first' => [101, '101st'],
+            'one hundred ninety-ninth' => [199, '199th'],
         ];
     }
 

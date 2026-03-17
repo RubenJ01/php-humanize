@@ -36,14 +36,14 @@ class NumberToWordsFormatter
         }
 
         if ($number < 100) {
-            $ten = self::TENS[(int) ($number / 10)];
+            $ten = self::TENS[intdiv($number, 10)];
             $one = $number % 10;
 
             return $one === 0 ? $ten : $ten . '-' . self::ONES[$one];
         }
 
         if ($number < 1000) {
-            $hundreds = self::ONES[(int) ($number / 100)] . ' hundred';
+            $hundreds = self::ONES[intdiv($number, 100)] . ' hundred';
             $remainder = $number % 100;
 
             return $remainder === 0 ? $hundreds : $hundreds . ' ' . $this->format($remainder);
@@ -58,7 +58,7 @@ class NumberToWordsFormatter
 
         foreach (self::SCALES as $threshold => $label) {
             if ($number >= $threshold) {
-                $count = (int) ($number / $threshold);
+                $count = intdiv($number, $threshold);
                 $parts[] = $this->format($count) . ' ' . $label;
                 $number %= $threshold;
             }
