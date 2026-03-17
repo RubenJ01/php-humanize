@@ -19,6 +19,8 @@ class NumberToWordsFormatter
 
     /** @var array<int, string> */
     private const SCALES = [
+        1_000_000_000_000_000_000 => 'quintillion',
+        1_000_000_000_000_000 => 'quadrillion',
         1_000_000_000_000 => 'trillion',
         1_000_000_000 => 'billion',
         1_000_000 => 'million',
@@ -27,29 +29,21 @@ class NumberToWordsFormatter
 
     public function format(int $number): string
     {
+        $prefix = '';
+
         if ($number < 0) {
-            return 'negative ' . $this->format(abs($number));
+            $prefix = 'negative ';
+            $number = abs($number);
         }
 
-        if ($number < 20) {
-            return self::ONES[$number];
-        }
+        return $prefix . $this->formatNonNegative($number);
+    }
 
-        if ($number < 100) {
-            $ten = self::TENS[intdiv($number, 10)];
-            $one = $number % 10;
-
-            return $one === 0 ? $ten : $ten . '-' . self::ONES[$one];
-        }
-
-        if ($number < 1000) {
-            $hundreds = self::ONES[intdiv($number, 100)] . ' hundred';
-            $remainder = $number % 100;
-
-            return $remainder === 0 ? $hundreds : $hundreds . ' ' . $this->format($remainder);
-        }
-
-        return $this->convertLargeNumber($number);
+    private function formatNonNegative(int $number): string
+    {
+        return $number < 1000
+            ? $this->formatSubThousand($number)
+            : $this->convertLargeNumber($number);
     }
 
     private function convertLargeNumber(int $number): string
@@ -59,15 +53,47 @@ class NumberToWordsFormatter
         foreach (self::SCALES as $threshold => $label) {
             if ($number >= $threshold) {
                 $count = intdiv($number, $threshold);
-                $parts[] = $this->format($count) . ' ' . $label;
+                $parts[] = $this->formatSubThousand($count) . ' ' . $label;
                 $number %= $threshold;
             }
         }
 
         if ($number > 0) {
-            $parts[] = $this->format($number);
+            $parts[] = $this->formatSubThousand($number);
         }
 
         return implode(', ', $parts);
+    }
+
+    private function formatSubThousand(int $number): string
+    {
+        if ($number < 100) {
+            return $this->formatSubHundred($number);
+        }
+
+        if ($number <= 999) {
+            $hundreds = self::ONES[intdiv($number, 100)] . ' hundred';
+            $remainder = $number % 100;
+
+            return $remainder === 0 ? $hundreds : $hundreds . ' ' . $this->formatSubHundred($remainder);
+        }
+
+        return (string) $number;
+    }
+
+    private function formatSubHundred(int $number): string
+    {
+        if ($number >= 20) {
+            $ten = self::TENS[intdiv($number, 10)];
+            $one = $number % 10;
+
+            return $one === 0 ? $ten : $ten . '-' . self::ONES[$one];
+        }
+
+        if ($number >= 0) {
+            return self::ONES[$number];
+        }
+
+        return (string) $number;
     }
 }

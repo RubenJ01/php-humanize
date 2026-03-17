@@ -32,6 +32,10 @@ class TimeDiffFormatterTest extends TestCase
             'eleven days ago rounds down to one week' => ['-11 days', '1 week ago'],
             'thirteen days ago stays one week' => ['-13 days', '1 week ago'],
             'weeks ago' => ['-14 days', '2 weeks ago'],
+            'singular month' => ['-1 month', '1 month ago'],
+            'months ago' => ['-2 months', '2 months ago'],
+            'singular year' => ['-1 year', '1 year ago'],
+            'years ago' => ['-2 years', '2 years ago'],
             'future diff' => ['+2 hours', 'in 2 hours'],
         ];
     }
@@ -43,5 +47,10 @@ class TimeDiffFormatterTest extends TestCase
         $dateTime = $now->modify($modifier);
 
         $this->assertEquals($expected, $this->formatter->format($dateTime, $now));
+    }
+
+    public function testItUsesCurrentTimeWhenRelativeDateIsNotProvided(): void
+    {
+        $this->assertEquals('just now', $this->formatter->format(new DateTimeImmutable()));
     }
 }
