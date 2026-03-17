@@ -1,0 +1,11 @@
+- [Home](Home)
+- [Installation](Installation)
+- [File Size](File-Size)
+- [Data Rate](Data-Rate)
+- [Ordinals](Ordinals)
+- [Numbers](Numbers)
+- [Duration](Duration)
+- [Time Difference](Time-Difference)
+- [Pluralization](Pluralization)
+- [List Joining](List-Joining)
+
