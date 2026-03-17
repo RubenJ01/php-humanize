@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.1](https://github.com/RubenJ01/php-humanize/compare/v1.1.0...v1.1.1) (2026-03-17)
+
+
+### Bug Fixes
+
+* faulty woodpecker pipeline ([#19](https://github.com/RubenJ01/php-humanize/issues/19)) ([0961be9](https://github.com/RubenJ01/php-humanize/commit/0961be9ed8ee9d9121cf41f5c1729c992bb47fe6))
+* **formatters:** harden NumberToWordsFormatter and FileSizeFormatter mutation boundaries ([#22](https://github.com/RubenJ01/php-humanize/issues/22)) ([49af56c](https://github.com/RubenJ01/php-humanize/commit/49af56c83582fdfbd1f873d2d5c847ba485932c7))
+* **formatters:** kill all escaped mutatants ([#21](https://github.com/RubenJ01/php-humanize/issues/21)) ([40b0ad1](https://github.com/RubenJ01/php-humanize/commit/40b0ad1365e419b533cad0393c495cd957c6e46f))
+
 ## [1.1.0](https://github.com/RubenJ01/php-humanize/compare/v1.0.0...v1.1.0) (2026-03-14)
 
 
