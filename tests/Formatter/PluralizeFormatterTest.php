@@ -34,6 +34,6 @@ class PluralizeFormatterTest extends TestCase
     #[DataProvider('pluralizeProvider')]
     public function testItPluralizesCorrectly(int $quantity, string $singular, ?string $plural, string $expected): void
     {
-        $this->assertEquals($expected, $this->formatter->format($quantity, $singular, $plural));
+        self::assertSame($expected, $this->formatter->format($quantity, $singular, $plural));
     }
 }

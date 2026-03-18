@@ -27,7 +27,8 @@
         "phpunit/phpunit": "^13.0",
         "squizlabs/php_codesniffer": "^4.0",
         "phpstan/phpstan": "^2.1",
-        "infection/infection": "^0.32.6"
+        "infection/infection": "^0.32.6",
+        "phpstan/phpstan-strict-rules": "^2.0"
     },
     "config": {
         "allow-plugins": {

@@ -34,17 +34,17 @@ class ListJoinFormatterTest extends TestCase
     #[DataProvider('listJoinProvider')]
     public function testItJoinsLists(array $items, string $expected): void
     {
-        $this->assertEquals($expected, $this->formatter->format($items));
+        self::assertSame($expected, $this->formatter->format($items));
     }
 
     public function testItJoinsWithCustomConjunction(): void
     {
-        $this->assertEquals('Alice or Bob', $this->formatter->format(['Alice', 'Bob'], 'or'));
+        self::assertSame('Alice or Bob', $this->formatter->format(['Alice', 'Bob'], 'or'));
     }
 
     public function testItJoinsWithCustomSeparator(): void
     {
-        $this->assertEquals(
+        self::assertSame(
             'Alice; Bob; and Charlie',
             $this->formatter->format(['Alice', 'Bob', 'Charlie'], 'and', '; ')
         );

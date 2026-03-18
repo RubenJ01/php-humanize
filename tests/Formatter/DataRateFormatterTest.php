@@ -35,16 +35,16 @@ class DataRateFormatterTest extends TestCase
     #[DataProvider('dataRateProvider')]
     public function testItFormatsDataRate(int $bytesPerSecond, string $expected): void
     {
-        $this->assertEquals($expected, $this->formatter->format($bytesPerSecond));
+        self::assertSame($expected, $this->formatter->format($bytesPerSecond));
     }
 
     public function testItFormatsDataRateWithCustomPrecision(): void
     {
-        $this->assertEquals('1.5625 KB/s', $this->formatter->format(1600, 4));
+        self::assertSame('1.5625 KB/s', $this->formatter->format(1600, 4));
     }
 
     public function testItUsesBinaryBaseForScalingWhenUsingHighPrecision(): void
     {
-        $this->assertEquals('1.563477 KB/s', $this->formatter->format(1601, 6));
+        self::assertSame('1.563477 KB/s', $this->formatter->format(1601, 6));
     }
 }
