@@ -11,6 +11,7 @@ use Rjds\PhpHumanize\Formatter\ListJoinFormatter;
 use Rjds\PhpHumanize\Formatter\NumberToWordsFormatter;
 use Rjds\PhpHumanize\Formatter\OrdinalFormatter;
 use Rjds\PhpHumanize\Formatter\PluralizeFormatter;
+use Rjds\PhpHumanize\Formatter\TextTruncationFormatter;
 use Rjds\PhpHumanize\Formatter\TimeDiffFormatter;
 
 class Humanizer implements HumanizerInterface
@@ -25,6 +26,7 @@ class Humanizer implements HumanizerInterface
         private readonly PluralizeFormatter $pluralizeFormatter = new PluralizeFormatter(),
         private readonly NumberToWordsFormatter $numberToWordsFormatter = new NumberToWordsFormatter(),
         private readonly DurationFormatter $durationFormatter = new DurationFormatter(),
+        private readonly TextTruncationFormatter $textTruncationFormatter = new TextTruncationFormatter(),
     ) {
     }
 
@@ -74,5 +76,10 @@ class Humanizer implements HumanizerInterface
     public function duration(int $seconds, ?int $precision = null): string
     {
         return $this->durationFormatter->format($seconds, $precision);
+    }
+
+    public function truncate(string $text, int $maxLength, string $suffix = '…'): string
+    {
+        return $this->textTruncationFormatter->format($text, $maxLength, $suffix);
     }
 }

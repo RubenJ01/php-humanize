@@ -86,4 +86,14 @@ interface HumanizerInterface
      * @return string
      */
     public function duration(int $seconds, ?int $precision = null): string;
+
+    /**
+     * Truncate text at a word boundary and append a suffix.
+     *
+     * @param string $text
+     * @param int $maxLength Maximum number of characters from the original text.
+     * @param string $suffix
+     * @return string
+     */
+    public function truncate(string $text, int $maxLength, string $suffix = '…'): string;
 }

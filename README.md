@@ -40,6 +40,7 @@ $humanizer->duration(3661);                   // "1 hour, 1 minute, 1 second"
 $humanizer->diffForHumans($fiveMinutesAgo);   // "5 minutes ago"
 $humanizer->pluralize(3, 'child', 'children');// "3 children"
 $humanizer->joinList(['A', 'B', 'C']);        // "A, B, and C"
+$humanizer->truncate('The quick brown fox jumps over the lazy dog', 20); // "The quick brown fox…"
 ```
 
 For detailed usage and all available options, see the [GitHub Wiki](https://github.com/RubenJ01/php-humanize/wiki).
