@@ -35,7 +35,7 @@ class DurationFormatterTest extends TestCase
     #[DataProvider('durationProvider')]
     public function testItFormatsDuration(int $seconds, string $expected): void
     {
-        $this->assertEquals($expected, $this->formatter->format($seconds));
+        self::assertSame($expected, $this->formatter->format($seconds));
     }
 
     /**
@@ -54,6 +54,6 @@ class DurationFormatterTest extends TestCase
     #[DataProvider('precisionProvider')]
     public function testItFormatsDurationWithPrecision(int $seconds, int $precision, string $expected): void
     {
-        $this->assertEquals($expected, $this->formatter->format($seconds, $precision));
+        self::assertSame($expected, $this->formatter->format($seconds, $precision));
     }
 }

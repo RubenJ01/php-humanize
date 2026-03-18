@@ -39,6 +39,6 @@ class OrdinalFormatterTest extends TestCase
     #[DataProvider('ordinalProvider')]
     public function testItFormatsOrdinals(int $number, string $expected): void
     {
-        $this->assertEquals($expected, $this->formatter->format($number));
+        self::assertSame($expected, $this->formatter->format($number));
     }
 }

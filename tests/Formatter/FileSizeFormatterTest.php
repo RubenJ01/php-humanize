@@ -36,21 +36,21 @@ class FileSizeFormatterTest extends TestCase
     #[DataProvider('fileSizeProvider')]
     public function testItFormatsFileSize(int $bytes, string $expected): void
     {
-        $this->assertEquals($expected, $this->formatter->format($bytes));
+        self::assertSame($expected, $this->formatter->format($bytes));
     }
 
     public function testItFormatsFileSizeWithCustomPrecision(): void
     {
-        $this->assertEquals('1.5625 KB', $this->formatter->format(1600, 4));
+        self::assertSame('1.5625 KB', $this->formatter->format(1600, 4));
     }
 
     public function testItFormatsExactPowerOf1024AsWholeUnit(): void
     {
-        $this->assertEquals('1 MB', $this->formatter->format(1024 ** 2));
+        self::assertSame('1 MB', $this->formatter->format(1024 ** 2));
     }
 
     public function testItUsesBinaryBaseForScalingWhenUsingHighPrecision(): void
     {
-        $this->assertEquals('1.563477 KB', $this->formatter->format(1601, 6));
+        self::assertSame('1.563477 KB', $this->formatter->format(1601, 6));
     }
 }

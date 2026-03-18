@@ -34,11 +34,11 @@ class AbbreviationFormatterTest extends TestCase
     #[DataProvider('abbreviationProvider')]
     public function testItAbbreviatesNumbers(float|int $number, string $expected): void
     {
-        $this->assertEquals($expected, $this->formatter->format($number));
+        self::assertSame($expected, $this->formatter->format($number));
     }
 
     public function testItAbbreviatesWithCustomPrecision(): void
     {
-        $this->assertEquals('1.25K', $this->formatter->format(1250, 2));
+        self::assertSame('1.25K', $this->formatter->format(1250, 2));
     }
 }

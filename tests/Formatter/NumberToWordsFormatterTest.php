@@ -42,6 +42,6 @@ class NumberToWordsFormatterTest extends TestCase
     #[DataProvider('numberToWordsProvider')]
     public function testItConvertsNumbersToWords(int $number, string $expected): void
     {
-        $this->assertEquals($expected, $this->formatter->format($number));
+        self::assertSame($expected, $this->formatter->format($number));
     }
 }

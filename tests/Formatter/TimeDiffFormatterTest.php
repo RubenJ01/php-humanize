@@ -46,11 +46,11 @@ class TimeDiffFormatterTest extends TestCase
         $now = new DateTimeImmutable();
         $dateTime = $now->modify($modifier);
 
-        $this->assertEquals($expected, $this->formatter->format($dateTime, $now));
+        self::assertSame($expected, $this->formatter->format($dateTime, $now));
     }
 
     public function testItUsesCurrentTimeWhenRelativeDateIsNotProvided(): void
     {
-        $this->assertEquals('just now', $this->formatter->format(new DateTimeImmutable()));
+        self::assertSame('just now', $this->formatter->format(new DateTimeImmutable()));
     }
 }
