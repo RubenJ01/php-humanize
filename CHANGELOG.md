@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.0](https://github.com/RubenJ01/php-humanize/compare/v1.1.1...v1.2.0) (2026-03-18)
+
+
+### Features
+
+* **formatters:** add human-readable data rate formatting ([#24](https://github.com/RubenJ01/php-humanize/issues/24)) ([089480f](https://github.com/RubenJ01/php-humanize/commit/089480fad87dbcd07204c8f831a3836914f9032c))
+* implement a text truncation method ([#30](https://github.com/RubenJ01/php-humanize/issues/30)) ([571bced](https://github.com/RubenJ01/php-humanize/commit/571bcedb004f453b57ed20a9856ca56354980c7c))
+
+
+### Bug Fixes
+
+* formatting in CHANGELOG.md ([a671caf](https://github.com/RubenJ01/php-humanize/commit/a671caf5680698822b45115cd1e187c4892fdb80))
+
 ## [1.1.1](https://github.com/RubenJ01/php-humanize/compare/v1.1.0...v1.1.1) (2026-03-17)
 
 
