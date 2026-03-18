@@ -63,4 +63,9 @@ class HumanizerTest extends TestCase
     {
         self::assertSame('1 hour, 1 minute, 1 second', $this->humanizer->duration(3661));
     }
+
+    public function testItDelegatesToTextTruncationFormatter(): void
+    {
+        self::assertSame('The quick brown fox…', $this->humanizer->truncate('The quick brown fox jumps', 20));
+    }
 }
