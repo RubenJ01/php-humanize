@@ -24,6 +24,7 @@ class FileSizeFormatterTest extends TestCase
             'zero bytes' => [0, '0 B'],
             'negative bytes are clamped to zero' => [-1, '0 B'],
             'bytes' => [500, '500 B'],
+            'exactly one kilobyte' => [1024, '1 KB'],
             'default precision uses one decimal place' => [1601, '1.6 KB'],
             'kilobytes' => [1536, '1.5 KB'],
             'just below one megabyte stays in kilobytes' => [1024 ** 2 - 1, '1,024 KB'],
@@ -52,5 +53,16 @@ class FileSizeFormatterTest extends TestCase
     public function testItUsesBinaryBaseForScalingWhenUsingHighPrecision(): void
     {
         self::assertSame('1.563477 KB', $this->formatter->format(1601, 6));
+    }
+
+    public function testItDefaultsToZeroWhenNoArgumentsAreProvided(): void
+    {
+        self::assertSame('0 B', $this->formatter->format());
+    }
+
+    public function testItCastsBytesAndPrecisionArguments(): void
+    {
+        self::assertSame('0 B', $this->formatter->format('foo'));
+        self::assertSame('2 KB', $this->formatter->format(1536, '0foo'));
     }
 }

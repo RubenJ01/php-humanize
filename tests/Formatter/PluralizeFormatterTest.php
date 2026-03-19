@@ -36,4 +36,27 @@ class PluralizeFormatterTest extends TestCase
     {
         self::assertSame($expected, $this->formatter->format($quantity, $singular, $plural));
     }
+
+    public function testItDefaultsArgumentsWhenNoneAreProvided(): void
+    {
+        self::assertSame('0 s', $this->formatter->format());
+    }
+
+    public function testItCastsQuantityAndWordArguments(): void
+    {
+        self::assertSame('0 s', $this->formatter->format('foo'));
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Singular form must be a string');
+
+        $this->formatter->format(2, 5);
+    }
+
+    public function testItRejectsInvalidPluralType(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Plural form must be a string or null');
+
+        $this->formatter->format(2, 'item', []);
+    }
 }

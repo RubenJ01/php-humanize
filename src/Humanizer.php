@@ -7,6 +7,7 @@ use Rjds\PhpHumanize\Formatter\AbbreviationFormatter;
 use Rjds\PhpHumanize\Formatter\DataRateFormatter;
 use Rjds\PhpHumanize\Formatter\DurationFormatter;
 use Rjds\PhpHumanize\Formatter\FileSizeFormatter;
+use Rjds\PhpHumanize\Formatter\FormatterInterface;
 use Rjds\PhpHumanize\Formatter\ListJoinFormatter;
 use Rjds\PhpHumanize\Formatter\NumberToWordsFormatter;
 use Rjds\PhpHumanize\Formatter\OrdinalFormatter;
@@ -16,43 +17,85 @@ use Rjds\PhpHumanize\Formatter\TimeDiffFormatter;
 
 class Humanizer implements HumanizerInterface
 {
+    private FormatterRegistry $registry;
+
+    /**
+     * Constructor accepts optional formatters for dependency injection.
+     * If no formatters are provided, default formatters are auto-registered.
+     */
     public function __construct(
-        private readonly FileSizeFormatter $fileSizeFormatter = new FileSizeFormatter(),
-        private readonly DataRateFormatter $dataRateFormatter = new DataRateFormatter(),
-        private readonly OrdinalFormatter $ordinalFormatter = new OrdinalFormatter(),
-        private readonly AbbreviationFormatter $abbreviationFormatter = new AbbreviationFormatter(),
-        private readonly TimeDiffFormatter $timeDiffFormatter = new TimeDiffFormatter(),
-        private readonly ListJoinFormatter $listJoinFormatter = new ListJoinFormatter(),
-        private readonly PluralizeFormatter $pluralizeFormatter = new PluralizeFormatter(),
-        private readonly NumberToWordsFormatter $numberToWordsFormatter = new NumberToWordsFormatter(),
-        private readonly DurationFormatter $durationFormatter = new DurationFormatter(),
-        private readonly TextTruncationFormatter $textTruncationFormatter = new TextTruncationFormatter(),
+        ?FileSizeFormatter $fileSizeFormatter = null,
+        ?DataRateFormatter $dataRateFormatter = null,
+        ?OrdinalFormatter $ordinalFormatter = null,
+        ?AbbreviationFormatter $abbreviationFormatter = null,
+        ?TimeDiffFormatter $timeDiffFormatter = null,
+        ?ListJoinFormatter $listJoinFormatter = null,
+        ?PluralizeFormatter $pluralizeFormatter = null,
+        ?NumberToWordsFormatter $numberToWordsFormatter = null,
+        ?DurationFormatter $durationFormatter = null,
+        ?TextTruncationFormatter $textTruncationFormatter = null,
     ) {
+        $this->registry = new FormatterRegistry();
+
+        // Register formatters - use provided instances or create defaults
+        $this->registry->register('fileSize', $fileSizeFormatter ?? new FileSizeFormatter());
+        $this->registry->register('dataRate', $dataRateFormatter ?? new DataRateFormatter());
+        $this->registry->register('ordinal', $ordinalFormatter ?? new OrdinalFormatter());
+        $this->registry->register('abbreviate', $abbreviationFormatter ?? new AbbreviationFormatter());
+        $this->registry->register('diffForHumans', $timeDiffFormatter ?? new TimeDiffFormatter());
+        $this->registry->register('joinList', $listJoinFormatter ?? new ListJoinFormatter());
+        $this->registry->register('pluralize', $pluralizeFormatter ?? new PluralizeFormatter());
+        $this->registry->register('toWords', $numberToWordsFormatter ?? new NumberToWordsFormatter());
+        $this->registry->register('duration', $durationFormatter ?? new DurationFormatter());
+        $this->registry->register('truncate', $textTruncationFormatter ?? new TextTruncationFormatter());
     }
+
+    /**
+     * Get the formatter registry for advanced usage (registering custom formatters, etc).
+     */
+    public function getRegistry(): FormatterRegistry
+    {
+        return $this->registry;
+    }
+
+    /**
+     * Register a custom formatter at runtime.
+     *
+     * @param string $name The formatter name
+     * @param FormatterInterface $formatter The formatter instance
+     * @return self For fluent interface
+     */
+    public function register(string $name, FormatterInterface $formatter): self
+    {
+        $this->registry->register($name, $formatter);
+        return $this;
+    }
+
+    // ...existing code...
 
     public function fileSize(int $bytes, int $precision = 1): string
     {
-        return $this->fileSizeFormatter->format($bytes, $precision);
+        return $this->registry->get('fileSize')->format($bytes, $precision);
     }
 
     public function dataRate(int $bytesPerSecond, int $precision = 1): string
     {
-        return $this->dataRateFormatter->format($bytesPerSecond, $precision);
+        return $this->registry->get('dataRate')->format($bytesPerSecond, $precision);
     }
 
     public function ordinal(int $number): string
     {
-        return $this->ordinalFormatter->format($number);
+        return $this->registry->get('ordinal')->format($number);
     }
 
     public function abbreviate(float|int $number, int $precision = 1): string
     {
-        return $this->abbreviationFormatter->format($number, $precision);
+        return $this->registry->get('abbreviate')->format($number, $precision);
     }
 
     public function diffForHumans(DateTimeInterface $dateTime, ?DateTimeInterface $relativeTo = null): string
     {
-        return $this->timeDiffFormatter->format($dateTime, $relativeTo);
+        return $this->registry->get('diffForHumans')->format($dateTime, $relativeTo);
     }
 
     /**
@@ -60,26 +103,54 @@ class Humanizer implements HumanizerInterface
      */
     public function joinList(array $items, string $conjunction = 'and', string $separator = ', '): string
     {
-        return $this->listJoinFormatter->format($items, $conjunction, $separator);
+        return $this->registry->get('joinList')->format($items, $conjunction, $separator);
     }
 
     public function pluralize(int $quantity, string $singular, ?string $plural = null): string
     {
-        return $this->pluralizeFormatter->format($quantity, $singular, $plural);
+        return $this->registry->get('pluralize')->format($quantity, $singular, $plural);
     }
 
     public function toWords(int $number): string
     {
-        return $this->numberToWordsFormatter->format($number);
+        return $this->registry->get('toWords')->format($number);
     }
 
     public function duration(int $seconds, ?int $precision = null): string
     {
-        return $this->durationFormatter->format($seconds, $precision);
+        return $this->registry->get('duration')->format($seconds, $precision);
     }
 
     public function truncate(string $text, int $maxLength, string $suffix = '…'): string
     {
-        return $this->textTruncationFormatter->format($text, $maxLength, $suffix);
+        return $this->registry->get('truncate')->format($text, $maxLength, $suffix);
+    }
+
+    /**
+     * Universal formatter method for dynamic usage.
+     * This allows calling any registered formatter with arbitrary arguments.
+     *
+     * @param string $formatterName The name of the registered formatter
+     * @param mixed ...$args Arguments to pass to the formatter
+     * @return string The formatted result
+     *
+     * @example $humanizer->apply('fileSize', 1024)
+     * @example $humanizer->apply('pluralize', 5, 'apple', 'apples')
+     */
+    public function apply(string $formatterName, ...$args): string
+    {
+        return $this->registry->get($formatterName)->format(...$args);
+    }
+
+    /**
+     * Magic method to allow calling formatters as methods.
+     * This enables dynamic method-like syntax for registered formatters.
+     *
+     * @example $humanizer->customFormatter($arg1, $arg2)
+     * @param array<int, mixed> $args
+     */
+    public function __call(string $method, array $args): string
+    {
+        return $this->registry->get($method)->format(...$args);
     }
 }

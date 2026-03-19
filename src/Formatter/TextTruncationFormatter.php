@@ -2,7 +2,7 @@
 
 namespace Rjds\PhpHumanize\Formatter;
 
-class TextTruncationFormatter
+class TextTruncationFormatter implements FormatterInterface
 {
     private const WHITESPACE_CHARACTERS = [
         ' ',
@@ -13,8 +13,26 @@ class TextTruncationFormatter
         "\f",
     ];
 
-    public function format(string $text, int $maxLength, string $suffix = '…'): string
+    public function format(...$args): string
     {
+        $text = $args[0] ?? '';
+        $maxLengthValue = $args[1] ?? '';
+        $suffix = $args[2] ?? '…';
+
+        if (!is_string($text)) {
+            throw new \InvalidArgumentException('Text must be a string');
+        }
+
+        if (!is_string($suffix)) {
+            throw new \InvalidArgumentException('Suffix must be a string');
+        }
+
+        if (!is_int($maxLengthValue) && !is_float($maxLengthValue) && !is_string($maxLengthValue)) {
+            throw new \InvalidArgumentException('Max length must be a scalar numeric value');
+        }
+
+        $maxLength = intdiv(intval($maxLengthValue), 1);
+
         $maxLength = max(0, $maxLength);
 
         $characters = $this->splitCharacters($text);
@@ -29,7 +47,7 @@ class TextTruncationFormatter
         if ($nextCharacter !== null && !$this->isWhitespace($nextCharacter)) {
             // Drop a partial trailing word until we hit whitespace.
             while ($chunk !== [] && !$this->isWhitespace($chunk[array_key_last($chunk)])) {
-                array_pop($chunk);
+                unset($chunk[array_key_last($chunk)]);
             }
         }
 
@@ -60,9 +78,14 @@ class TextTruncationFormatter
     private function trimTrailingWhitespace(array $characters): array
     {
         while ($characters !== [] && $this->isWhitespace($characters[array_key_last($characters)])) {
-            array_pop($characters);
+            unset($characters[array_key_last($characters)]);
         }
 
         return $characters;
+    }
+
+    public function getName(): string
+    {
+        return 'truncate';
     }
 }

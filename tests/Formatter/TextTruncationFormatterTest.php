@@ -99,4 +99,38 @@ class TextTruncationFormatterTest extends TestCase
     ): void {
         self::assertSame($expected, $this->formatter->format($text, $maxLength, $suffix));
     }
+
+    public function testItRejectsInvalidMaxLengthType(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Max length must be a scalar numeric value');
+
+        $this->formatter->format('Hello World', [], '...');
+    }
+
+    public function testItAcceptsNumericStringMaxLength(): void
+    {
+        self::assertSame('The quick…', $this->formatter->format('The quick brown', '9', '…'));
+    }
+
+    public function testItAcceptsFloatMaxLengthByNormalizingToInteger(): void
+    {
+        self::assertSame('The quick…', $this->formatter->format('The quick brown', 9.7, '…'));
+    }
+
+    public function testItRejectsInvalidSuffixType(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Suffix must be a string');
+
+        $this->formatter->format('Hello World', 5, []);
+    }
+
+    public function testItRejectsInvalidTextType(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Text must be a string');
+
+        $this->formatter->format([], 5, '...');
+    }
 }

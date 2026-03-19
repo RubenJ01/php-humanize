@@ -24,6 +24,7 @@ class DataRateFormatterTest extends TestCase
             'zero bytes per second' => [0, '0 B/s'],
             'negative bytes per second are clamped to zero' => [-1, '0 B/s'],
             'bytes per second' => [500, '500 B/s'],
+            'exactly one kilobyte per second' => [1024, '1 KB/s'],
             'default precision uses one decimal place' => [1601, '1.6 KB/s'],
             'kilobytes per second' => [1536, '1.5 KB/s'],
             'megabytes per second' => [1048576, '1 MB/s'],
@@ -46,5 +47,16 @@ class DataRateFormatterTest extends TestCase
     public function testItUsesBinaryBaseForScalingWhenUsingHighPrecision(): void
     {
         self::assertSame('1.563477 KB/s', $this->formatter->format(1601, 6));
+    }
+
+    public function testItDefaultsToZeroWhenNoArgumentsAreProvided(): void
+    {
+        self::assertSame('0 B/s', $this->formatter->format());
+    }
+
+    public function testItCastsBytesPerSecondAndPrecisionArguments(): void
+    {
+        self::assertSame('0 B/s', $this->formatter->format('foo'));
+        self::assertSame('2 KB/s', $this->formatter->format(1536, '0foo'));
     }
 }

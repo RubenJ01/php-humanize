@@ -56,4 +56,15 @@ class DurationFormatterTest extends TestCase
     {
         self::assertSame($expected, $this->formatter->format($seconds, $precision));
     }
+
+    public function testItDefaultsToZeroWhenNoArgumentsAreProvided(): void
+    {
+        self::assertSame('0 seconds', $this->formatter->format());
+    }
+
+    public function testItCastsSecondsAndPrecisionArguments(): void
+    {
+        self::assertSame('0 seconds', $this->formatter->format('foo'));
+        self::assertSame('1 hour', $this->formatter->format(3661, '1foo'));
+    }
 }

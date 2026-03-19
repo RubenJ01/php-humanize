@@ -2,13 +2,34 @@
 
 namespace Rjds\PhpHumanize\Formatter;
 
-class ListJoinFormatter
+class ListJoinFormatter implements FormatterInterface
 {
     /**
-     * @param array<int, string> $items
+     * @param mixed ...$args
      */
-    public function format(array $items, string $conjunction = 'and', string $separator = ', '): string
+    public function format(...$args): string
     {
+        $items = isset($args[0]) && is_array($args[0]) ? $args[0] : [];
+        $conjunction = $args[1] ?? 'and';
+        $separator = $args[2] ?? ', ';
+
+        if (!is_string($conjunction)) {
+            throw new \InvalidArgumentException('Conjunction must be a string');
+        }
+
+        if (!is_string($separator)) {
+            throw new \InvalidArgumentException('Separator must be a string');
+        }
+
+        foreach ($items as $item) {
+            if (!is_string($item)) {
+                throw new \InvalidArgumentException('All list items must be strings');
+            }
+        }
+
+        /** @var array<int, string> $items */
+        $items = array_values($items);
+
         $count = count($items);
 
         if ($count === 0) {
@@ -26,5 +47,10 @@ class ListJoinFormatter
         $last = array_pop($items);
 
         return implode($separator, $items) . $separator . $conjunction . ' ' . $last;
+    }
+
+    public function getName(): string
+    {
+        return 'joinList';
     }
 }
