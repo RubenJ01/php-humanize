@@ -2,10 +2,15 @@
 
 namespace Rjds\PhpHumanize\Formatter;
 
-class OrdinalFormatter
+class OrdinalFormatter implements FormatterInterface
 {
-    public function format(int $number): string
+    public function format(...$args): string
     {
+        $rawNumber = $args[0] ?? 0;
+        $number = is_scalar($rawNumber)
+            ? (int) $rawNumber
+            : 0;
+
         $abs = abs($number);
         $lastTwo = $abs % 100;
         $lastOne = $abs % 10;
@@ -22,5 +27,10 @@ class OrdinalFormatter
         }
 
         return $number . $suffix;
+    }
+
+    public function getName(): string
+    {
+        return 'ordinal';
     }
 }

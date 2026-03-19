@@ -2,8 +2,10 @@
 
 namespace Rjds\PhpHumanize\Tests\Formatter;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use ReflectionMethod;
 use Rjds\PhpHumanize\Formatter\NumberToWordsFormatter;
 
 class NumberToWordsFormatterTest extends TestCase
@@ -43,5 +45,35 @@ class NumberToWordsFormatterTest extends TestCase
     public function testItConvertsNumbersToWords(int $number, string $expected): void
     {
         self::assertSame($expected, $this->formatter->format($number));
+    }
+
+    public function testPrivateSubThousandFallbackForValuesAboveRange(): void
+    {
+        $method = new ReflectionMethod($this->formatter, 'formatSubThousand');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Sub-thousand formatter only accepts values from 0 to 999');
+
+        $method->invoke($this->formatter, 1001);
+    }
+
+    public function testPrivateSubHundredRejectsNegativeValues(): void
+    {
+        $method = new ReflectionMethod($this->formatter, 'formatSubHundred');
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Number must be non-negative');
+
+        $method->invoke($this->formatter, -1);
+    }
+
+    public function testItDefaultsToZeroWhenNoArgumentsAreProvided(): void
+    {
+        self::assertSame('zero', $this->formatter->format());
+    }
+
+    public function testItCastsNumericInputArgument(): void
+    {
+        self::assertSame('zero', $this->formatter->format('foo'));
     }
 }

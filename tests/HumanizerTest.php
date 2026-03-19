@@ -4,12 +4,24 @@ namespace Rjds\PhpHumanize\Tests;
 
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
+use Rjds\PhpHumanize\Formatter\AbbreviationFormatter;
+use Rjds\PhpHumanize\Formatter\DataRateFormatter;
+use Rjds\PhpHumanize\Formatter\DurationFormatter;
+use Rjds\PhpHumanize\Formatter\FileSizeFormatter;
+use Rjds\PhpHumanize\Formatter\FormatterInterface;
+use Rjds\PhpHumanize\Formatter\ListJoinFormatter;
+use Rjds\PhpHumanize\Formatter\NumberToWordsFormatter;
+use Rjds\PhpHumanize\Formatter\OrdinalFormatter;
+use Rjds\PhpHumanize\Formatter\PluralizeFormatter;
+use Rjds\PhpHumanize\Formatter\TextTruncationFormatter;
+use Rjds\PhpHumanize\Formatter\TimeDiffFormatter;
+use Rjds\PhpHumanize\FormatterRegistry;
 use Rjds\PhpHumanize\Humanizer;
-use Rjds\PhpHumanize\HumanizerInterface;
+use RuntimeException;
 
 class HumanizerTest extends TestCase
 {
-    private HumanizerInterface $humanizer;
+    private Humanizer $humanizer;
 
     protected function setUp(): void
     {
@@ -67,5 +79,170 @@ class HumanizerTest extends TestCase
     public function testItDelegatesToTextTruncationFormatter(): void
     {
         self::assertSame('The quick brown fox…', $this->humanizer->truncate('The quick brown fox jumps', 20));
+    }
+
+    public function testItExposesFormatterRegistry(): void
+    {
+        self::assertInstanceOf(FormatterRegistry::class, $this->humanizer->getRegistry());
+    }
+
+    public function testItRegistersAndAppliesCustomFormatter(): void
+    {
+        $formatter = new class implements FormatterInterface {
+            public function format(...$args): string
+            {
+                $value = $args[0] ?? '';
+
+                return strtoupper(self::toString($value));
+            }
+
+            private static function toString(mixed $value): string
+            {
+                if (is_string($value)) {
+                    return $value;
+                }
+
+                if (is_int($value) || is_float($value) || is_bool($value)) {
+                    return (string) $value;
+                }
+
+                return '';
+            }
+
+            public function getName(): string
+            {
+                return 'shout';
+            }
+        };
+
+        $result = $this->humanizer->register('shout', $formatter);
+
+        self::assertSame($this->humanizer, $result);
+        self::assertSame('HELLO', $this->humanizer->apply('shout', 'hello'));
+    }
+
+    public function testMagicCallInvokesRegisteredFormatter(): void
+    {
+        $formatter = new class implements FormatterInterface {
+            public function format(...$args): string
+            {
+                return implode(':', array_map([self::class, 'toString'], $args));
+            }
+
+            private static function toString(mixed $value): string
+            {
+                if (is_string($value)) {
+                    return $value;
+                }
+
+                if (is_int($value) || is_float($value) || is_bool($value)) {
+                    return (string) $value;
+                }
+
+                return '';
+            }
+
+            public function getName(): string
+            {
+                return 'concat';
+            }
+        };
+
+        $this->humanizer->register('concat', $formatter);
+
+        self::assertSame('a:b:3', $this->humanizer->__call('concat', ['a', 'b', 3]));
+    }
+
+    public function testApplyThrowsForUnknownFormatter(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage("Formatter 'missing' is not registered");
+
+        $this->humanizer->apply('missing');
+    }
+
+    public function testMagicCallThrowsForUnknownFormatter(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage("Formatter 'missing' is not registered");
+
+        $this->humanizer->__call('missing', []);
+    }
+
+    public function testConstructorUsesProvidedFormatterInstances(): void
+    {
+        $humanizer = new Humanizer(
+            new class extends FileSizeFormatter {
+                public function format(...$args): string
+                {
+                    return 'fs';
+                }
+            },
+            new class extends DataRateFormatter {
+                public function format(...$args): string
+                {
+                    return 'dr';
+                }
+            },
+            new class extends OrdinalFormatter {
+                public function format(...$args): string
+                {
+                    return 'ord';
+                }
+            },
+            new class extends AbbreviationFormatter {
+                public function format(...$args): string
+                {
+                    return 'abbr';
+                }
+            },
+            new class extends TimeDiffFormatter {
+                public function format(...$args): string
+                {
+                    return 'diff';
+                }
+            },
+            new class extends ListJoinFormatter {
+                public function format(...$args): string
+                {
+                    return 'join';
+                }
+            },
+            new class extends PluralizeFormatter {
+                public function format(...$args): string
+                {
+                    return 'plural';
+                }
+            },
+            new class extends NumberToWordsFormatter {
+                public function format(...$args): string
+                {
+                    return 'words';
+                }
+            },
+            new class extends DurationFormatter {
+                public function format(...$args): string
+                {
+                    return 'dur';
+                }
+            },
+            new class extends TextTruncationFormatter {
+                public function format(...$args): string
+                {
+                    return 'trunc';
+                }
+            },
+        );
+
+        self::assertSame('fs', $humanizer->fileSize(1));
+        self::assertSame('dr', $humanizer->dataRate(1));
+        self::assertSame('ord', $humanizer->ordinal(1));
+        self::assertSame('abbr', $humanizer->abbreviate(1));
+        self::assertSame('diff', $humanizer->diffForHumans(new DateTimeImmutable()));
+        self::assertSame('join', $humanizer->joinList(['a', 'b']));
+        self::assertSame('plural', $humanizer->pluralize(2, 'x'));
+        self::assertSame('words', $humanizer->toWords(2));
+        self::assertSame('dur', $humanizer->duration(2));
+        self::assertSame('trunc', $humanizer->truncate('abc', 1));
     }
 }

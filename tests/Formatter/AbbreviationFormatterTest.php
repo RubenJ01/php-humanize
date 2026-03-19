@@ -41,4 +41,24 @@ class AbbreviationFormatterTest extends TestCase
     {
         self::assertSame('1.25K', $this->formatter->format(1250, 2));
     }
+
+    public function testItDefaultsToZeroWhenNoArgumentsAreProvided(): void
+    {
+        self::assertSame('0', $this->formatter->format());
+    }
+
+    public function testItNormalizesTrueToZero(): void
+    {
+        self::assertSame('0', $this->formatter->format(true));
+    }
+
+    public function testItNormalizesNumericStringsBeforeFormatting(): void
+    {
+        self::assertSame('9', $this->formatter->format('0009'));
+    }
+
+    public function testItCastsPrecisionToInteger(): void
+    {
+        self::assertSame('2K', $this->formatter->format(1500, '0foo'));
+    }
 }
