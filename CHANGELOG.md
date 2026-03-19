@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.1](https://github.com/RubenJ01/php-humanize/compare/v2.0.0...v2.0.1) (2026-03-19)
+
+
+### Bug Fixes
+
+* also run the ci.yml pipeline on pr creation to main ([#36](https://github.com/RubenJ01/php-humanize/issues/36)) ([02dae2e](https://github.com/RubenJ01/php-humanize/commit/02dae2ea8a01b9431d65c749370358eb15193e15))
+* ci pipeline ([#34](https://github.com/RubenJ01/php-humanize/issues/34)) ([b8f3a9e](https://github.com/RubenJ01/php-humanize/commit/b8f3a9eb8b8277f01d31735ed16a33c995a75e16))
+
 ## [2.0.0](https://github.com/RubenJ01/php-humanize/compare/v1.2.0...v2.0.0) (2026-03-19)
 
 
