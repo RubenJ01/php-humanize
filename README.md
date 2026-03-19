@@ -8,28 +8,22 @@ A PHP library to convert machine data into human-readable strings.
 
 ## Installation
 
-Add these lines to your composer.json file, or add a new repository URL if you already have one or more:
-
-```json
-{
-    "repositories": [
-        {"type": "composer", "url": "https://ruben-jakob-digital-solutions.repo.repman.rubenjakob.com"}
-    ]
-}
-```
-
-Then require the package:
+Install from Packagist:
 
 ```bash
 composer require rjds/php-humanize
 ```
 
+If you use a private Composer mirror, add your repository configuration first and then run the same require command.
+
 ## Overview
 
 ```php
+use DateTimeImmutable;
 use Rjds\PhpHumanize\Humanizer;
 
 $humanizer = new Humanizer();
+$fiveMinutesAgo = new DateTimeImmutable('-5 minutes');
 
 $humanizer->fileSize(5452595);                // "5.2 MB"
 $humanizer->dataRate(1536);                   // "1.5 KB/s"
@@ -45,26 +39,74 @@ $humanizer->truncate('The quick brown fox jumps over the lazy dog', 20); // "The
 
 For detailed usage and all available options, see the [GitHub Wiki](https://github.com/RubenJ01/php-humanize/wiki).
 
+## Common Usage
+
+### File sizes
+
+```php
+use Rjds\PhpHumanize\Humanizer;
+
+$humanizer = new Humanizer();
+
+echo $humanizer->fileSize(5452595); // 5.2 MB
+```
+
+### Durations
+
+```php
+use Rjds\PhpHumanize\Humanizer;
+
+$humanizer = new Humanizer();
+
+echo $humanizer->duration(3661); // 1 hour, 1 minute, 1 second
+```
+
+### Time differences
+
+```php
+use DateTimeImmutable;
+use Rjds\PhpHumanize\Humanizer;
+
+$humanizer = new Humanizer();
+$fiveMinutesAgo = new DateTimeImmutable('-5 minutes');
+
+echo $humanizer->diffForHumans($fiveMinutesAgo); // 5 minutes ago
+```
+
+### Pluralization
+
+```php
+use Rjds\PhpHumanize\Humanizer;
+
+$humanizer = new Humanizer();
+
+echo $humanizer->pluralize(3, 'child', 'children'); // 3 children
+```
+
 ### Custom Formatters
 
 Need a formatter that's not built-in? Create and register your own in seconds:
 
 ```php
+use Rjds\PhpHumanize\Formatter\FormatterInterface;
+use Rjds\PhpHumanize\Humanizer;
+
 class MyFormatter implements FormatterInterface {
     public function format(...$args): string {
         return "custom: " . $args[0];
     }
+
     public function getName(): string {
         return 'my';
     }
 }
 
+$humanizer = new Humanizer();
 $humanizer->register('my', new MyFormatter());
-echo $humanizer->my('hello'); // "custom: hello"
+echo $humanizer->my('hello'); // custom: hello
 ```
 
 See [Custom Formatters](https://github.com/RubenJ01/php-humanize/wiki/Custom-Formatters) in the wiki for more details, examples, and best practices.
-
 
 ## Development
 
@@ -79,4 +121,10 @@ Run mutation testing:
 php vendor/bin/infection --threads=4
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow.
+## Contributing
+
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines, local quality checks, and pull request workflow.
+
+## License
+
+This project is released under the MIT License. See [LICENSE](LICENSE) for details and [CHANGELOG.md](CHANGELOG.md) for release history.
