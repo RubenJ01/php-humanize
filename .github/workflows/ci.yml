@@ -19,7 +19,7 @@ jobs:
           coverage: ${{ matrix.php-version == '8.4' && 'pcov' || 'none' }}
 
       - name: Install dependencies
-        run: composer install --no-dev
+        run: composer install
 
       - name: Run tests
         run: ./vendor/bin/phpunit
