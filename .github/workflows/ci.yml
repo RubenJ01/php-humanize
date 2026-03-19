@@ -2,6 +2,8 @@ name: CI
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -19,7 +21,7 @@ jobs:
           coverage: ${{ matrix.php-version == '8.4' && 'pcov' || 'none' }}
 
       - name: Install dependencies
-        run: composer install
+        run: composer update --no-interaction
 
       - name: Run tests
         run: ./vendor/bin/phpunit
