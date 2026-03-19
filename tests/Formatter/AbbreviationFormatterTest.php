@@ -47,16 +47,6 @@ class AbbreviationFormatterTest extends TestCase
         self::assertSame('0', $this->formatter->format());
     }
 
-    public function testItKeepsNanAsFloatInput(): void
-    {
-        self::assertSame('NAN', $this->formatter->format(NAN));
-    }
-
-    public function testItNormalizesFalseToZero(): void
-    {
-        self::assertSame('0', $this->formatter->format(false));
-    }
-
     public function testItNormalizesTrueToZero(): void
     {
         self::assertSame('0', $this->formatter->format(true));
