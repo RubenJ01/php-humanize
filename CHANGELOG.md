@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/RubenJ01/php-humanize/compare/v1.2.0...v2.0.0) (2026-03-19)
+
+
+### ⚠ BREAKING CHANGES
+
+* add dynamic formatter registry and runtime formatter registration ([#31](https://github.com/RubenJ01/php-humanize/issues/31))
+
+### Features
+
+* add dynamic formatter registry and runtime formatter registration ([#31](https://github.com/RubenJ01/php-humanize/issues/31)) ([e303ae3](https://github.com/RubenJ01/php-humanize/commit/e303ae34729872a8234dbf87b27d94c769d2f073))
+
 ## [1.2.0](https://github.com/RubenJ01/php-humanize/compare/v1.1.1...v1.2.0) (2026-03-18)
 
 
