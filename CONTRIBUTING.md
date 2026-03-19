@@ -68,3 +68,28 @@
    Woodpecker CI will run phpcs, phpstan, and phpunit on the PR automatically.
 
 8. **Merge with squash merge** on GitHub
+
+## Adding New Formatters
+
+New formatters should be added to `src/Formatter/` and must:
+
+1. **Implement `FormatterInterface`**
+   ```php
+   class MyFormatter implements FormatterInterface
+   ```
+
+2. **Implement the required methods**
+   ```php
+   public function format(...$args): string { /* ... */ }
+   public function getName(): string { return 'myFormatter'; }
+   ```
+
+3. **Add corresponding tests** in `tests/Formatter/MyFormatterTest.php`
+
+4. **Update the README** if it's a user-facing feature (in the Overview or Custom Formatters section)
+
+5. **Register the formatter** in `src/Humanizer.php` constructor
+
+Note: For custom formatters that you want to distribute separately, you don't need to modify the core library. Just implement `FormatterInterface` and users can register it with `$humanizer->register('name', $formatter)`.
+
+

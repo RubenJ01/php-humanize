@@ -2,7 +2,7 @@
 
 namespace Rjds\PhpHumanize\Formatter;
 
-class NumberToWordsFormatter
+class NumberToWordsFormatter implements FormatterInterface
 {
     private const ONES = [
         0 => 'zero', 1 => 'one', 2 => 'two', 3 => 'three', 4 => 'four',
@@ -27,8 +27,13 @@ class NumberToWordsFormatter
         1_000 => 'thousand',
     ];
 
-    public function format(int $number): string
+    public function format(...$args): string
     {
+        $rawNumber = $args[0] ?? 0;
+        $number = is_scalar($rawNumber)
+            ? (int) $rawNumber
+            : 0;
+
         $prefix = '';
 
         if ($number < 0) {
@@ -78,7 +83,7 @@ class NumberToWordsFormatter
             return $remainder === 0 ? $hundreds : $hundreds . ' ' . $this->formatSubHundred($remainder);
         }
 
-        return (string) $number;
+        throw new \InvalidArgumentException('Sub-thousand formatter only accepts values from 0 to 999');
     }
 
     private function formatSubHundred(int $number): string
@@ -94,6 +99,11 @@ class NumberToWordsFormatter
             return self::ONES[$number];
         }
 
-        return (string) $number;
+        throw new \InvalidArgumentException('Number must be non-negative');
+    }
+
+    public function getName(): string
+    {
+        return 'toWords';
     }
 }

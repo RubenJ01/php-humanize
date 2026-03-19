@@ -3,6 +3,7 @@
 namespace Rjds\PhpHumanize;
 
 use DateTimeInterface;
+use Rjds\PhpHumanize\Formatter\FormatterInterface;
 
 interface HumanizerInterface
 {
@@ -96,4 +97,29 @@ interface HumanizerInterface
      * @return string
      */
     public function truncate(string $text, int $maxLength, string $suffix = '…'): string;
+
+    /**
+     * Get the formatter registry for advanced usage.
+     *
+     * @return FormatterRegistry
+     */
+    public function getRegistry(): FormatterRegistry;
+
+    /**
+     * Register a custom formatter at runtime.
+     *
+     * @param string $name The formatter name
+     * @param FormatterInterface $formatter The formatter instance
+     * @return self For fluent interface
+     */
+    public function register(string $name, FormatterInterface $formatter): self;
+
+    /**
+     * Apply a formatter dynamically by name.
+     *
+     * @param string $formatterName The name of the registered formatter
+     * @param mixed ...$args Arguments to pass to the formatter
+     * @return string The formatted result
+     */
+    public function apply(string $formatterName, ...$args): string;
 }

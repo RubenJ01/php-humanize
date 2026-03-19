@@ -45,6 +45,27 @@ $humanizer->truncate('The quick brown fox jumps over the lazy dog', 20); // "The
 
 For detailed usage and all available options, see the [GitHub Wiki](https://github.com/RubenJ01/php-humanize/wiki).
 
+### Custom Formatters
+
+Need a formatter that's not built-in? Create and register your own in seconds:
+
+```php
+class MyFormatter implements FormatterInterface {
+    public function format(...$args): string {
+        return "custom: " . $args[0];
+    }
+    public function getName(): string {
+        return 'my';
+    }
+}
+
+$humanizer->register('my', new MyFormatter());
+echo $humanizer->my('hello'); // "custom: hello"
+```
+
+See [Custom Formatters](https://github.com/RubenJ01/php-humanize/wiki/Custom-Formatters) in the wiki for more details, examples, and best practices.
+
+
 ## Development
 
 ```bash

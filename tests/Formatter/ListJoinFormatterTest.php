@@ -49,4 +49,25 @@ class ListJoinFormatterTest extends TestCase
             $this->formatter->format(['Alice', 'Bob', 'Charlie'], 'and', '; ')
         );
     }
+
+    public function testItTreatsNonArrayItemsAsEmptyList(): void
+    {
+        self::assertSame('', $this->formatter->format('not-an-array'));
+    }
+
+    public function testItRejectsNonStringConjunction(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Conjunction must be a string');
+
+        $this->formatter->format(['Alice', 'Bob'], []);
+    }
+
+    public function testItRejectsNonStringSeparator(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Separator must be a string');
+
+        $this->formatter->format(['Alice', 'Bob', 'Charlie'], 'and', []);
+    }
 }

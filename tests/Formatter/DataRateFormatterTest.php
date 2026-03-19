@@ -47,4 +47,15 @@ class DataRateFormatterTest extends TestCase
     {
         self::assertSame('1.563477 KB/s', $this->formatter->format(1601, 6));
     }
+
+    public function testItDefaultsToZeroWhenNoArgumentsAreProvided(): void
+    {
+        self::assertSame('0 B/s', $this->formatter->format());
+    }
+
+    public function testItCastsBytesPerSecondAndPrecisionArguments(): void
+    {
+        self::assertSame('0 B/s', $this->formatter->format('foo'));
+        self::assertSame('2 KB/s', $this->formatter->format(1536, '0foo'));
+    }
 }

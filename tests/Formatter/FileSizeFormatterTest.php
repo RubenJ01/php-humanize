@@ -53,4 +53,15 @@ class FileSizeFormatterTest extends TestCase
     {
         self::assertSame('1.563477 KB', $this->formatter->format(1601, 6));
     }
+
+    public function testItDefaultsToZeroWhenNoArgumentsAreProvided(): void
+    {
+        self::assertSame('0 B', $this->formatter->format());
+    }
+
+    public function testItCastsBytesAndPrecisionArguments(): void
+    {
+        self::assertSame('0 B', $this->formatter->format('foo'));
+        self::assertSame('2 KB', $this->formatter->format(1536, '0foo'));
+    }
 }

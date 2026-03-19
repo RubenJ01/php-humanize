@@ -3,6 +3,7 @@
 namespace Rjds\PhpHumanize\Tests\Formatter;
 
 use DateTimeImmutable;
+use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Rjds\PhpHumanize\Formatter\TimeDiffFormatter;
@@ -52,5 +53,13 @@ class TimeDiffFormatterTest extends TestCase
     public function testItUsesCurrentTimeWhenRelativeDateIsNotProvided(): void
     {
         self::assertSame('just now', $this->formatter->format(new DateTimeImmutable()));
+    }
+
+    public function testItThrowsWhenFirstArgumentIsNotDateTime(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('First argument must be a DateTimeInterface');
+
+        $this->formatter->format('invalid');
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Rjds\PhpHumanize\Formatter;
 
-class TextTruncationFormatter
+class TextTruncationFormatter implements FormatterInterface
 {
     private const WHITESPACE_CHARACTERS = [
         ' ',
@@ -13,8 +13,26 @@ class TextTruncationFormatter
         "\f",
     ];
 
-    public function format(string $text, int $maxLength, string $suffix = '…'): string
+    public function format(...$args): string
     {
+        $text = $args[0] ?? '';
+        $maxLengthValue = $args[1] ?? '';
+        $suffix = $args[2] ?? '…';
+
+        if (!is_string($text)) {
+            throw new \InvalidArgumentException('Text must be a string');
+        }
+
+        if (!is_string($suffix)) {
+            throw new \InvalidArgumentException('Suffix must be a string');
+        }
+
+        if (!is_int($maxLengthValue) && !is_float($maxLengthValue) && !is_string($maxLengthValue)) {
+            throw new \InvalidArgumentException('Max length must be a scalar numeric value');
+        }
+
+        $maxLength = intdiv(intval($maxLengthValue), 1);
+
         $maxLength = max(0, $maxLength);
 
         $characters = $this->splitCharacters($text);
@@ -64,5 +82,10 @@ class TextTruncationFormatter
         }
 
         return $characters;
+    }
+
+    public function getName(): string
+    {
+        return 'truncate';
     }
 }

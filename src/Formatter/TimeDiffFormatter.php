@@ -5,12 +5,23 @@ namespace Rjds\PhpHumanize\Formatter;
 use DateTimeImmutable;
 use DateTimeInterface;
 
-class TimeDiffFormatter
+class TimeDiffFormatter implements FormatterInterface
 {
-    public function format(DateTimeInterface $dateTime, ?DateTimeInterface $relativeTo = null): string
+    public function format(...$args): string
     {
-        $relativeTo = $relativeTo ?? new DateTimeImmutable();
-        $diff = $relativeTo->diff($dateTime);
+        $dateTime = $args[0] ?? null;
+        $relativeTo = $args[1] ?? null;
+
+        if (!($dateTime instanceof DateTimeInterface)) {
+            throw new \InvalidArgumentException('First argument must be a DateTimeInterface');
+        }
+
+        if ($relativeTo !== null && !$relativeTo instanceof DateTimeInterface) {
+            throw new \InvalidArgumentException('Second argument must be a DateTimeInterface or null');
+        }
+
+        $relative = $relativeTo ?? new DateTimeImmutable();
+        $diff = $relative->diff($dateTime);
         $isFuture = $diff->invert === 0;
 
         if ($diff->y > 0) {
@@ -37,5 +48,10 @@ class TimeDiffFormatter
         }
 
         return $isFuture ? 'in ' . $value : $value . ' ago';
+    }
+
+    public function getName(): string
+    {
+        return 'diffForHumans';
     }
 }

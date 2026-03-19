@@ -41,4 +41,14 @@ class OrdinalFormatterTest extends TestCase
     {
         self::assertSame($expected, $this->formatter->format($number));
     }
+
+    public function testItDefaultsToZeroWhenNoArgumentsAreProvided(): void
+    {
+        self::assertSame('0th', $this->formatter->format());
+    }
+
+    public function testItCastsInputToInteger(): void
+    {
+        self::assertSame('0th', $this->formatter->format('foo'));
+    }
 }
