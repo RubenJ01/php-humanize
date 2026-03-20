@@ -7,6 +7,9 @@ use Rjds\PhpHumanize\Formatter\FormatterInterface;
 
 interface HumanizerInterface
 {
+    public const LOCALE_EN = 'en';
+    public const LOCALE_NL = 'nl';
+
     /**
      * Convert bytes to a human-readable file size.
      *
@@ -102,7 +105,7 @@ interface HumanizerInterface
      * Format a date as a human-readable localized string.
      *
      * @param DateTimeInterface $dateTime
-     * @param string|null $locale Locale identifier like en, en_US, nl, or nl_NL. Defaults to en when null.
+     * @param string|null $locale Locale identifier like en, en_US, nl, or nl_NL. Defaults to self::LOCALE_EN when null.
      * @return string
      */
     public function readableDate(DateTimeInterface $dateTime, ?string $locale = null): string;

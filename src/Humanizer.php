@@ -18,6 +18,9 @@ use Rjds\PhpHumanize\Formatter\TimeDiffFormatter;
 
 class Humanizer implements HumanizerInterface
 {
+    public const LOCALE_EN = DateLocalizedFormatter::LOCALE_EN;
+    public const LOCALE_NL = DateLocalizedFormatter::LOCALE_NL;
+
     private FormatterRegistry $registry;
 
     /**
@@ -74,8 +77,6 @@ class Humanizer implements HumanizerInterface
         return $this;
     }
 
-    // ...existing code...
-
     public function fileSize(int $bytes, int $precision = 1): string
     {
         return $this->registry->get('fileSize')->format($bytes, $precision);
@@ -131,7 +132,7 @@ class Humanizer implements HumanizerInterface
 
     public function readableDate(DateTimeInterface $dateTime, ?string $locale = null): string
     {
-        return $this->registry->get('readableDate')->format($dateTime, $locale ?? 'en');
+        return $this->registry->get('readableDate')->format($dateTime, $locale ?? self::LOCALE_EN);
     }
 
     /**

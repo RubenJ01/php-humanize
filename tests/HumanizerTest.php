@@ -86,21 +86,21 @@ class HumanizerTest extends TestCase
     {
         $dateTime = new DateTimeImmutable('2026-03-30 10:00:00+00:00');
 
-        self::assertSame('Maandag 30 maart', $this->humanizer->readableDate($dateTime, 'nl'));
+        self::assertSame('Maandag 30 maart 2026', $this->humanizer->readableDate($dateTime, Humanizer::LOCALE_NL));
     }
 
     public function testReadableDateUsesEnglishAsDefaultLocale(): void
     {
         $dateTime = new DateTimeImmutable('2026-03-30 10:00:00+00:00');
 
-        self::assertSame('Monday 30 March', $this->humanizer->readableDate($dateTime));
+        self::assertSame('Monday 30 March 2026', $this->humanizer->readableDate($dateTime));
     }
 
     public function testReadableDateUsesEnglishWhenLocaleIsNull(): void
     {
         $dateTime = new DateTimeImmutable('2026-03-30 10:00:00+00:00');
 
-        self::assertSame('Monday 30 March', $this->humanizer->readableDate($dateTime, null));
+        self::assertSame('Monday 30 March 2026', $this->humanizer->readableDate($dateTime, null));
     }
 
     public function testItExposesFormatterRegistry(): void
