@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://github.com/RubenJ01/php-humanize/compare/v2.1.0...v2.2.0) (2026-03-20)
+
+
+### Features
+
+* add year and constants to date conversion formatter ([#39](https://github.com/RubenJ01/php-humanize/issues/39)) ([927d79a](https://github.com/RubenJ01/php-humanize/commit/927d79aebb942fd12504ae089cabeaacc4426c73))
+
 ## [2.1.0](https://github.com/RubenJ01/php-humanize/compare/v2.0.1...v2.1.0) (2026-03-20)
 
 
