@@ -99,6 +99,15 @@ interface HumanizerInterface
     public function truncate(string $text, int $maxLength, string $suffix = '…'): string;
 
     /**
+     * Format a date as a human-readable localized string.
+     *
+     * @param DateTimeInterface $dateTime
+     * @param string|null $locale Locale identifier like en, en_US, nl, or nl_NL. Defaults to en when null.
+     * @return string
+     */
+    public function readableDate(DateTimeInterface $dateTime, ?string $locale = null): string;
+
+    /**
      * Get the formatter registry for advanced usage.
      *
      * @return FormatterRegistry

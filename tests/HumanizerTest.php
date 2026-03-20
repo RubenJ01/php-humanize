@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use Rjds\PhpHumanize\Formatter\AbbreviationFormatter;
 use Rjds\PhpHumanize\Formatter\DataRateFormatter;
+use Rjds\PhpHumanize\Formatter\DateLocalizedFormatter;
 use Rjds\PhpHumanize\Formatter\DurationFormatter;
 use Rjds\PhpHumanize\Formatter\FileSizeFormatter;
 use Rjds\PhpHumanize\Formatter\FormatterInterface;
@@ -79,6 +80,27 @@ class HumanizerTest extends TestCase
     public function testItDelegatesToTextTruncationFormatter(): void
     {
         self::assertSame('The quick brown fox…', $this->humanizer->truncate('The quick brown fox jumps', 20));
+    }
+
+    public function testItDelegatesToDateLocalizedFormatter(): void
+    {
+        $dateTime = new DateTimeImmutable('2026-03-30 10:00:00+00:00');
+
+        self::assertSame('Maandag 30 maart', $this->humanizer->readableDate($dateTime, 'nl'));
+    }
+
+    public function testReadableDateUsesEnglishAsDefaultLocale(): void
+    {
+        $dateTime = new DateTimeImmutable('2026-03-30 10:00:00+00:00');
+
+        self::assertSame('Monday 30 March', $this->humanizer->readableDate($dateTime));
+    }
+
+    public function testReadableDateUsesEnglishWhenLocaleIsNull(): void
+    {
+        $dateTime = new DateTimeImmutable('2026-03-30 10:00:00+00:00');
+
+        self::assertSame('Monday 30 March', $this->humanizer->readableDate($dateTime, null));
     }
 
     public function testItExposesFormatterRegistry(): void
@@ -232,6 +254,12 @@ class HumanizerTest extends TestCase
                     return 'trunc';
                 }
             },
+            new class extends DateLocalizedFormatter {
+                public function format(...$args): string
+                {
+                    return 'date';
+                }
+            },
         );
 
         self::assertSame('fs', $humanizer->fileSize(1));
@@ -244,5 +272,6 @@ class HumanizerTest extends TestCase
         self::assertSame('words', $humanizer->toWords(2));
         self::assertSame('dur', $humanizer->duration(2));
         self::assertSame('trunc', $humanizer->truncate('abc', 1));
+        self::assertSame('date', $humanizer->readableDate(new DateTimeImmutable()));
     }
 }

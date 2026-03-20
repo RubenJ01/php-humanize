@@ -6,6 +6,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Rjds\PhpHumanize\Formatter\AbbreviationFormatter;
 use Rjds\PhpHumanize\Formatter\DataRateFormatter;
+use Rjds\PhpHumanize\Formatter\DateLocalizedFormatter;
 use Rjds\PhpHumanize\Formatter\DurationFormatter;
 use Rjds\PhpHumanize\Formatter\FileSizeFormatter;
 use Rjds\PhpHumanize\Formatter\FormatterInterface;
@@ -31,6 +32,7 @@ class FormatterMetadataTest extends TestCase
         NumberToWordsFormatter::class => 'toWords',
         DurationFormatter::class => 'duration',
         TextTruncationFormatter::class => 'truncate',
+        DateLocalizedFormatter::class => 'readableDate',
     ];
 
     /**
