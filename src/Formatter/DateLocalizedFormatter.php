@@ -6,6 +6,9 @@ use DateTimeInterface;
 
 class DateLocalizedFormatter implements FormatterInterface
 {
+    public const LOCALE_EN = 'en';
+    public const LOCALE_NL = 'nl';
+
     /**
      * @var array<string, array{weekdays: array<int, string>, months: array<int, string>}>
      */
@@ -65,7 +68,7 @@ class DateLocalizedFormatter implements FormatterInterface
     public function format(...$args): string
     {
         $dateTime = $args[0] ?? null;
-        $locale = $args[1] ?? 'en';
+        $locale = $args[1] ?? self::LOCALE_EN;
 
         if (!($dateTime instanceof DateTimeInterface)) {
             throw new \InvalidArgumentException('First argument must be a DateTimeInterface');
@@ -89,15 +92,15 @@ class DateLocalizedFormatter implements FormatterInterface
         $language = preg_replace('/[_-].*/', '', $locale);
 
         if (!is_string($language)) {
-            $language = 'en';
+            $language = self::LOCALE_EN;
         }
 
         $language = strtolower($language);
-        $translations = self::FALLBACK_TRANSLATIONS[$language] ?? self::FALLBACK_TRANSLATIONS['en'];
+        $translations = self::FALLBACK_TRANSLATIONS[$language] ?? self::FALLBACK_TRANSLATIONS[self::LOCALE_EN];
 
         $weekday = $translations['weekdays'][$dateTime->format('N')];
         $month = $translations['months'][$dateTime->format('n')];
 
-        return $weekday . ' ' . $dateTime->format('j') . ' ' . $month;
+        return $weekday . ' ' . $dateTime->format('j') . ' ' . $month . ' ' . $dateTime->format('Y');
     }
 }

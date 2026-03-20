@@ -12,30 +12,66 @@ class DateLocalizedFormatterTest extends TestCase
 {
     private DateLocalizedFormatter $formatter;
 
-    protected function setUp(): void
-    {
-        $this->formatter = new DateLocalizedFormatter();
-    }
-
     /**
      * @return array<string, array{string, string, string}>
      */
     public static function localizedDateProvider(): array
     {
         return [
-            'english march' => ['2026-03-30 12:00:00+00:00', 'en', 'Monday 30 March'],
-            'english march date only' => ['2026-03-30', 'en', 'Monday 30 March'],
-            'dutch march' => ['2026-03-30 12:00:00+00:00', 'nl', 'Maandag 30 maart'],
-            'dutch march date only' => ['2026-03-30', 'nl', 'Maandag 30 maart'],
-            'dutch february date only' => ['2022-02-17', 'nl', 'Donderdag 17 februari'],
-            'dutch locale with region' => ['2026-03-30 12:00:00+00:00', 'nl_NL', 'Maandag 30 maart'],
-            'dutch uppercase locale' => ['2026-03-30 12:00:00+00:00', 'NL', 'Maandag 30 maart'],
-            'english leap day' => ['2024-02-29 12:00:00+00:00', 'en', 'Thursday 29 February'],
-            'dutch leap day' => ['2024-02-29 12:00:00+00:00', 'nl', 'Donderdag 29 februari'],
-            'english january' => ['2026-01-05 12:00:00+00:00', 'en', 'Monday 5 January'],
-            'dutch january' => ['2026-01-05 12:00:00+00:00', 'nl', 'Maandag 5 januari'],
-            'english december' => ['2026-12-25 12:00:00+00:00', 'en', 'Friday 25 December'],
-            'dutch december' => ['2026-12-25 12:00:00+00:00', 'nl', 'Vrijdag 25 december'],
+            'english march' => ['2026-03-30 12:00:00+00:00', DateLocalizedFormatter::LOCALE_EN, 'Monday 30 March 2026'],
+            'english march date only' => ['2026-03-30', DateLocalizedFormatter::LOCALE_EN, 'Monday 30 March 2026'],
+            'dutch march' => ['2026-03-30 12:00:00+00:00', DateLocalizedFormatter::LOCALE_NL, 'Maandag 30 maart 2026'],
+            'dutch march date only' => ['2026-03-30', DateLocalizedFormatter::LOCALE_NL, 'Maandag 30 maart 2026'],
+            'dutch february date only' => [
+                '2022-02-17',
+                DateLocalizedFormatter::LOCALE_NL,
+                'Donderdag 17 februari 2022'
+            ],
+            'dutch locale with region' => ['2026-03-30 12:00:00+00:00', 'nl_NL', 'Maandag 30 maart 2026'],
+            'dutch uppercase locale' => ['2026-03-30 12:00:00+00:00', 'NL', 'Maandag 30 maart 2026'],
+            'english leap day' => [
+                '2024-02-29 12:00:00+00:00',
+                DateLocalizedFormatter::LOCALE_EN,
+                'Thursday 29 February 2024'
+            ],
+            'dutch leap day' => [
+                '2024-02-29 12:00:00+00:00',
+                DateLocalizedFormatter::LOCALE_NL,
+                'Donderdag 29 februari 2024'
+            ],
+            'english january' => [
+                '2026-01-05 12:00:00+00:00',
+                DateLocalizedFormatter::LOCALE_EN,
+                'Monday 5 January 2026'
+            ],
+            'dutch january' => [
+                '2026-01-05 12:00:00+00:00',
+                DateLocalizedFormatter::LOCALE_NL,
+                'Maandag 5 januari 2026'
+            ],
+            'english december' => [
+                '2026-12-25 12:00:00+00:00',
+                DateLocalizedFormatter::LOCALE_EN,
+                'Friday 25 December 2026'
+            ],
+            'dutch december' => [
+                '2026-12-25 12:00:00+00:00',
+                DateLocalizedFormatter::LOCALE_NL,
+                'Vrijdag 25 december 2026'
+            ],
+        ];
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function fallbackLocaleProvider(): array
+    {
+        return [
+            'french fallback' => ['fr', 'Monday 30 March 2026'],
+            'french fallback date only' => ['fr_FR', 'Monday 30 March 2026'],
+            'german locale fallback' => ['de_DE', 'Monday 30 March 2026'],
+            'unknown language fallback' => ['zz', 'Monday 30 March 2026'],
         ];
     }
 
@@ -45,19 +81,6 @@ class DateLocalizedFormatterTest extends TestCase
         $dateTime = new DateTimeImmutable($date);
 
         self::assertSame($expected, $this->formatter->format($dateTime, $locale));
-    }
-
-    /**
-     * @return array<string, array{string, string}>
-     */
-    public static function fallbackLocaleProvider(): array
-    {
-        return [
-            'french fallback' => ['fr', 'Monday 30 March'],
-            'french fallback date only' => ['fr_FR', 'Monday 30 March'],
-            'german locale fallback' => ['de_DE', 'Monday 30 March'],
-            'unknown language fallback' => ['zz', 'Monday 30 March'],
-        ];
     }
 
     #[DataProvider('fallbackLocaleProvider')]
@@ -72,7 +95,7 @@ class DateLocalizedFormatterTest extends TestCase
     {
         $dateTime = new DateTimeImmutable('2026-03-30');
 
-        self::assertSame('Monday 30 March', $this->formatter->format($dateTime));
+        self::assertSame('Monday 30 March 2026', $this->formatter->format($dateTime));
     }
 
     public function testItThrowsWhenFirstArgumentIsNotDateTime(): void
@@ -89,5 +112,10 @@ class DateLocalizedFormatterTest extends TestCase
         $this->expectExceptionMessage('Second argument must be a non-empty locale string');
 
         $this->formatter->format(new DateTimeImmutable('2026-03-30 12:00:00+00:00'), '   ');
+    }
+
+    protected function setUp(): void
+    {
+        $this->formatter = new DateLocalizedFormatter();
     }
 }
