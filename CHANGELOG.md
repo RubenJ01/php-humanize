@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/RubenJ01/php-humanize/compare/v2.0.1...v2.1.0) (2026-03-20)
+
+
+### Features
+
+* implemented a formatter for transforming dates ([#37](https://github.com/RubenJ01/php-humanize/issues/37)) ([7902e28](https://github.com/RubenJ01/php-humanize/commit/7902e28dd186f65651e87a246ecc1f9292c0ed0f))
+
 ## [2.0.1](https://github.com/RubenJ01/php-humanize/compare/v2.0.0...v2.0.1) (2026-03-19)
 
 
