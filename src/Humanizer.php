@@ -5,6 +5,7 @@ namespace Rjds\PhpHumanize;
 use DateTimeInterface;
 use Rjds\PhpHumanize\Formatter\AbbreviationFormatter;
 use Rjds\PhpHumanize\Formatter\DataRateFormatter;
+use Rjds\PhpHumanize\Formatter\DateLocalizedFormatter;
 use Rjds\PhpHumanize\Formatter\DurationFormatter;
 use Rjds\PhpHumanize\Formatter\FileSizeFormatter;
 use Rjds\PhpHumanize\Formatter\FormatterInterface;
@@ -34,6 +35,7 @@ class Humanizer implements HumanizerInterface
         ?NumberToWordsFormatter $numberToWordsFormatter = null,
         ?DurationFormatter $durationFormatter = null,
         ?TextTruncationFormatter $textTruncationFormatter = null,
+        ?DateLocalizedFormatter $dateLocalizedFormatter = null,
     ) {
         $this->registry = new FormatterRegistry();
 
@@ -48,6 +50,7 @@ class Humanizer implements HumanizerInterface
         $this->registry->register('toWords', $numberToWordsFormatter ?? new NumberToWordsFormatter());
         $this->registry->register('duration', $durationFormatter ?? new DurationFormatter());
         $this->registry->register('truncate', $textTruncationFormatter ?? new TextTruncationFormatter());
+        $this->registry->register('readableDate', $dateLocalizedFormatter ?? new DateLocalizedFormatter());
     }
 
     /**
@@ -124,6 +127,11 @@ class Humanizer implements HumanizerInterface
     public function truncate(string $text, int $maxLength, string $suffix = '…'): string
     {
         return $this->registry->get('truncate')->format($text, $maxLength, $suffix);
+    }
+
+    public function readableDate(DateTimeInterface $dateTime, ?string $locale = null): string
+    {
+        return $this->registry->get('readableDate')->format($dateTime, $locale ?? 'en');
     }
 
     /**
