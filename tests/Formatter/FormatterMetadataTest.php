@@ -11,6 +11,7 @@ use Rjds\PhpHumanize\Formatter\DurationFormatter;
 use Rjds\PhpHumanize\Formatter\FileSizeFormatter;
 use Rjds\PhpHumanize\Formatter\FormatterInterface;
 use Rjds\PhpHumanize\Formatter\ListJoinFormatter;
+use Rjds\PhpHumanize\Formatter\NumberFormatter;
 use Rjds\PhpHumanize\Formatter\NumberToWordsFormatter;
 use Rjds\PhpHumanize\Formatter\OrdinalFormatter;
 use Rjds\PhpHumanize\Formatter\PluralizeFormatter;
@@ -33,6 +34,7 @@ class FormatterMetadataTest extends TestCase
         DurationFormatter::class => 'duration',
         TextTruncationFormatter::class => 'truncate',
         DateLocalizedFormatter::class => 'readableDate',
+        NumberFormatter::class => 'number',
     ];
 
     /**

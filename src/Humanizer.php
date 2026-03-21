@@ -10,6 +10,7 @@ use Rjds\PhpHumanize\Formatter\DurationFormatter;
 use Rjds\PhpHumanize\Formatter\FileSizeFormatter;
 use Rjds\PhpHumanize\Formatter\FormatterInterface;
 use Rjds\PhpHumanize\Formatter\ListJoinFormatter;
+use Rjds\PhpHumanize\Formatter\NumberFormatter;
 use Rjds\PhpHumanize\Formatter\NumberToWordsFormatter;
 use Rjds\PhpHumanize\Formatter\OrdinalFormatter;
 use Rjds\PhpHumanize\Formatter\PluralizeFormatter;
@@ -39,6 +40,7 @@ class Humanizer implements HumanizerInterface
         ?DurationFormatter $durationFormatter = null,
         ?TextTruncationFormatter $textTruncationFormatter = null,
         ?DateLocalizedFormatter $dateLocalizedFormatter = null,
+        ?NumberFormatter $numberFormatter = null,
     ) {
         $this->registry = new FormatterRegistry();
 
@@ -54,6 +56,7 @@ class Humanizer implements HumanizerInterface
         $this->registry->register('duration', $durationFormatter ?? new DurationFormatter());
         $this->registry->register('truncate', $textTruncationFormatter ?? new TextTruncationFormatter());
         $this->registry->register('readableDate', $dateLocalizedFormatter ?? new DateLocalizedFormatter());
+        $this->registry->register('number', $numberFormatter ?? new NumberFormatter());
     }
 
     /**
@@ -135,6 +138,14 @@ class Humanizer implements HumanizerInterface
         return $this->registry->get('readableDate')->format($dateTime, $locale ?? self::LOCALE_EN);
     }
 
+    public function number(
+        float|int $number,
+        int $precision = self::DEFAULT_NUMBER_PRECISION,
+        ?string $locale = null
+    ): string {
+        return $this->registry->get('number')->format($number, $precision, $locale ?? self::LOCALE_EN);
+    }
+
     /**
      * Universal formatter method for dynamic usage.
      * This allows calling any registered formatter with arbitrary arguments.
@@ -155,8 +166,8 @@ class Humanizer implements HumanizerInterface
      * Magic method to allow calling formatters as methods.
      * This enables dynamic method-like syntax for registered formatters.
      *
-     * @example $humanizer->customFormatter($arg1, $arg2)
      * @param array<int, mixed> $args
+     * @example $humanizer->customFormatter($arg1, $arg2)
      */
     public function __call(string $method, array $args): string
     {

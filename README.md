@@ -29,6 +29,7 @@ $humanizer->fileSize(5452595);                // "5.2 MB"
 $humanizer->dataRate(1536);                   // "1.5 KB/s"
 $humanizer->ordinal(21);                      // "21st"
 $humanizer->abbreviate(2300000);              // "2.3M"
+$humanizer->number(1234567.89, 2, Humanizer::LOCALE_NL); // "1.234.567,89"
 $humanizer->toWords(42);                      // "forty-two"
 $humanizer->duration(3661);                   // "1 hour, 1 minute, 1 second"
 $humanizer->diffForHumans($fiveMinutesAgo);   // "5 minutes ago"
@@ -60,6 +61,17 @@ use Rjds\PhpHumanize\Humanizer;
 $humanizer = new Humanizer();
 
 echo $humanizer->duration(3661); // 1 hour, 1 minute, 1 second
+```
+
+### Numbers
+
+```php
+use Rjds\PhpHumanize\Humanizer;
+
+$humanizer = new Humanizer();
+
+echo $humanizer->number(1234567.89, 2); // 1,234,567.89
+echo $humanizer->number(1234567.89, 2, Humanizer::LOCALE_NL); // 1.234.567,89
 ```
 
 ### Time differences
