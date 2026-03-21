@@ -11,6 +11,7 @@ use Rjds\PhpHumanize\Formatter\DurationFormatter;
 use Rjds\PhpHumanize\Formatter\FileSizeFormatter;
 use Rjds\PhpHumanize\Formatter\FormatterInterface;
 use Rjds\PhpHumanize\Formatter\ListJoinFormatter;
+use Rjds\PhpHumanize\Formatter\NumberFormatter;
 use Rjds\PhpHumanize\Formatter\NumberToWordsFormatter;
 use Rjds\PhpHumanize\Formatter\OrdinalFormatter;
 use Rjds\PhpHumanize\Formatter\PluralizeFormatter;
@@ -101,6 +102,16 @@ class HumanizerTest extends TestCase
         $dateTime = new DateTimeImmutable('2026-03-30 10:00:00+00:00');
 
         self::assertSame('Monday 30 March 2026', $this->humanizer->readableDate($dateTime, null));
+    }
+
+    public function testItDelegatesToNumberFormatter(): void
+    {
+        self::assertSame('1.234,57', $this->humanizer->number(1234.567, 2, Humanizer::LOCALE_NL));
+    }
+
+    public function testNumberUsesZeroPrecisionByDefault(): void
+    {
+        self::assertSame('1,235', $this->humanizer->number(1234.56));
     }
 
     public function testItExposesFormatterRegistry(): void
@@ -260,6 +271,12 @@ class HumanizerTest extends TestCase
                     return 'date';
                 }
             },
+            new class extends NumberFormatter {
+                public function format(...$args): string
+                {
+                    return 'num';
+                }
+            },
         );
 
         self::assertSame('fs', $humanizer->fileSize(1));
@@ -273,5 +290,6 @@ class HumanizerTest extends TestCase
         self::assertSame('dur', $humanizer->duration(2));
         self::assertSame('trunc', $humanizer->truncate('abc', 1));
         self::assertSame('date', $humanizer->readableDate(new DateTimeImmutable()));
+        self::assertSame('num', $humanizer->number(1));
     }
 }

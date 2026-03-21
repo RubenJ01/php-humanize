@@ -9,6 +9,7 @@ interface HumanizerInterface
 {
     public const LOCALE_EN = 'en';
     public const LOCALE_NL = 'nl';
+    public const DEFAULT_NUMBER_PRECISION = 0;
 
     /**
      * Convert bytes to a human-readable file size.
@@ -44,6 +45,20 @@ interface HumanizerInterface
      * @return string
      */
     public function abbreviate(float|int $number, int $precision = 1): string;
+
+    /**
+     * Format a number with locale-aware thousand and decimal separators.
+     *
+     * @param float|int $number
+     * @param int $precision
+     * @param string|null $locale Locale identifier like en, en_US, nl, or nl_NL. Defaults to self::LOCALE_EN when null.
+     * @return string
+     */
+    public function number(
+        float|int $number,
+        int $precision = self::DEFAULT_NUMBER_PRECISION,
+        ?string $locale = null
+    ): string;
 
     /**
      * Express a datetime as a human-readable difference from now.
