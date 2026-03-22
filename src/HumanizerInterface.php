@@ -50,13 +50,14 @@ interface HumanizerInterface
      * Format a number with locale-aware thousand and decimal separators.
      *
      * @param float|int $number
-     * @param int $precision
-     * @param string|null $locale Locale identifier like en, en_US, nl, or nl_NL. Defaults to self::LOCALE_EN when null.
+     * @param int|null $precision Defaults to configured precision when null.
+     * @param string|null $locale Locale identifier like en, en_US, nl, or nl_NL.
+     *                            Defaults to configured locale when null.
      * @return string
      */
     public function number(
         float|int $number,
-        int $precision = self::DEFAULT_NUMBER_PRECISION,
+        ?int $precision = null,
         ?string $locale = null
     ): string;
 
@@ -73,11 +74,11 @@ interface HumanizerInterface
      * Join a list of items into a human-readable string.
      *
      * @param array<int, string> $items
-     * @param string $conjunction
+     * @param string|null $conjunction Defaults to configured conjunction when null.
      * @param string $separator
      * @return string
      */
-    public function joinList(array $items, string $conjunction = 'and', string $separator = ', '): string;
+    public function joinList(array $items, ?string $conjunction = null, string $separator = ', '): string;
 
     /**
      * Convert a quantity and noun into a correctly pluralized string.
@@ -111,10 +112,10 @@ interface HumanizerInterface
      *
      * @param string $text
      * @param int $maxLength Maximum number of characters from the original text.
-     * @param string $suffix
+     * @param string|null $suffix Defaults to configured suffix when null.
      * @return string
      */
-    public function truncate(string $text, int $maxLength, string $suffix = '…'): string;
+    public function truncate(string $text, int $maxLength, ?string $suffix = null): string;
 
     /**
      * Format a date as a human-readable localized string.
