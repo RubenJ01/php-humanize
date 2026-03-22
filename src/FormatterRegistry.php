@@ -90,21 +90,32 @@ class FormatterRegistry
             throw new RuntimeException("Directory '{$directory}' does not exist");
         }
 
-        $files = scandir($directory);
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($directory)
+        );
 
-        foreach ($files as $file) {
-            if ($file === 'FormatterInterface.php') {
+        foreach ($iterator as $file) {
+            if (!$file instanceof \SplFileInfo || !$file->isFile()) {
                 continue;
             }
 
-            if (!str_ends_with($file, '.php')) {
+            if ($file->getExtension() !== 'php' || $file->getFilename() === 'FormatterInterface.php') {
                 continue;
             }
 
-            $className = substr($file, 0, -4);
-            $fullClassName = $namespace . '\\' . $className;
+            $relativePath = ltrim(substr($file->getPathname(), strlen($directory)), '\\/');
+            $relativeClass = str_replace(['/', '\\'], '\\', substr($relativePath, 0, -4));
 
-            if (class_exists($fullClassName)) {
+            $candidates = [
+                $namespace . '\\' . $relativeClass,
+                $namespace . '\\' . $file->getBasename('.php'),
+            ];
+
+            foreach (array_unique($candidates) as $fullClassName) {
+                if (!class_exists($fullClassName)) {
+                    continue;
+                }
+
                 $reflectionClass = new \ReflectionClass($fullClassName);
 
                 if (
@@ -114,11 +125,11 @@ class FormatterRegistry
                 ) {
                     $instance = new $fullClassName();
 
-                    if (!$instance instanceof FormatterInterface) {
-                        continue;
+                    if ($instance instanceof FormatterInterface) {
+                        $this->register($instance->getName(), $instance);
                     }
 
-                    $this->register($instance->getName(), $instance);
+                    break;
                 }
             }
         }

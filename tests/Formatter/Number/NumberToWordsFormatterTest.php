@@ -1,6 +1,6 @@
 <?php
 
-namespace Rjds\PhpHumanize\Tests\Formatter;
+namespace Rjds\PhpHumanize\Tests\Formatter\Number;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
