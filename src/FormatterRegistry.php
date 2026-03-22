@@ -90,36 +90,49 @@ class FormatterRegistry
             throw new RuntimeException("Directory '{$directory}' does not exist");
         }
 
-        $files = scandir($directory);
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($directory)
+        );
 
-        foreach ($files as $file) {
-            if ($file === 'FormatterInterface.php') {
+        foreach ($iterator as $file) {
+            /** @var \SplFileInfo $file */
+
+            if (!$file->isFile()) {
                 continue;
             }
 
-            if (!str_ends_with($file, '.php')) {
+            if ($file->getExtension() !== 'php') {
                 continue;
             }
 
-            $className = substr($file, 0, -4);
-            $fullClassName = $namespace . '\\' . $className;
+            if ($file->getFilename() === 'FormatterInterface.php') {
+                continue;
+            }
 
-            if (class_exists($fullClassName)) {
-                $reflectionClass = new \ReflectionClass($fullClassName);
+            $relativePath = substr($file->getPathname(), strlen($directory));
 
-                if (
-                    $reflectionClass->implementsInterface(FormatterInterface::class) &&
-                    !$reflectionClass->isAbstract() &&
-                    !$reflectionClass->isInterface()
-                ) {
-                    $instance = new $fullClassName();
+            $relativeClass = ltrim($relativePath, '\\/');
+            $relativeClass = str_replace(['/', '\\', '.php'], ['\\', '\\', ''], $relativeClass);
+            $fullClassName = $namespace . '\\' . $relativeClass;
 
-                    if (!$instance instanceof FormatterInterface) {
-                        continue;
-                    }
+            if (!class_exists($fullClassName)) {
+                continue;
+            }
 
-                    $this->register($instance->getName(), $instance);
-                }
+            $reflectionClass = new \ReflectionClass($fullClassName);
+
+            if (
+                !$reflectionClass->implementsInterface(FormatterInterface::class) ||
+                $reflectionClass->isAbstract() ||
+                $reflectionClass->isInterface()
+            ) {
+                continue;
+            }
+
+            $instance = new $fullClassName();
+
+            if ($instance instanceof FormatterInterface) {
+                $this->register($instance->getName(), $instance);
             }
         }
 

@@ -2,27 +2,26 @@
 
 namespace Rjds\PhpHumanize\Formatter;
 
-class DataRateFormatter implements FormatterInterface
+class FileSizeFormatter implements FormatterInterface
 {
-    private const UNITS = ['B/s', 'KB/s', 'MB/s', 'GB/s', 'TB/s', 'PB/s'];
+    private const UNITS = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
 
     public function format(...$args): string
     {
-        $rawBytesPerSecond = $args[0] ?? '';
+        $rawBytes = $args[0] ?? '';
         $rawPrecision = $args[1] ?? 1;
 
-        $bytesPerSecond = is_scalar($rawBytesPerSecond)
-            ? (int) $rawBytesPerSecond
+        $bytes = is_scalar($rawBytes)
+            ? max(0, (int) $rawBytes)
             : 0;
         $precision = is_scalar($rawPrecision)
             ? (int) $rawPrecision
             : 1;
 
-        $bytesPerSecond = max(0, $bytesPerSecond);
 
         $maxExponent = count(self::UNITS) - 1;
         $exponent = 0;
-        $value = $bytesPerSecond;
+        $value = $bytes;
 
         for (; $exponent < $maxExponent; $exponent++) {
             if ($value < 1024) {
@@ -40,6 +39,6 @@ class DataRateFormatter implements FormatterInterface
 
     public function getName(): string
     {
-        return 'dataRate';
+        return 'fileSize';
     }
 }

@@ -24,12 +24,7 @@ class NumberFormatter implements FormatterInterface
             throw new \InvalidArgumentException('Third argument must be a non-empty locale string');
         }
 
-        $language = preg_replace('/[_-].*/', '', $rawLocale);
-
-        if (!is_string($language)) {
-            $language = DateLocalizedFormatter::LOCALE_EN;
-        }
-
+        $language = preg_replace('/[_-].*/', '', $rawLocale) ?? DateLocalizedFormatter::LOCALE_EN;
         $language = strtolower($language);
         [$decimalSeparator, $thousandsSeparator] = self::LOCALE_FORMATS[$language] ??
             self::LOCALE_FORMATS[DateLocalizedFormatter::LOCALE_EN];

@@ -10,11 +10,8 @@ steps:
       - apt-get update -qq && apt-get install -y -qq git unzip > /dev/null 2>&1
       - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
       - composer update --no-interaction --prefer-dist --quiet
-      - echo "══════ PHP CodeSniffer (PSR-12) ══════"
       - vendor/bin/phpcs --standard=PSR12 src/
-      - echo "══════ PHPStan (Level 9) ══════"
-      - vendor/bin/phpstan analyse --configuration=phpstan.neon --no-progress
-      - echo "══════ PHPUnit ══════"
+      - vendor/bin/phpstan analyse --configuration=phpstan.neon --no-progress --memory-limit=-1
       - pecl install pcov > /dev/null 2>&1 && docker-php-ext-enable pcov
       - vendor/bin/phpunit --colors=always --coverage-clover=coverage.xml
       - echo "Infection (Mutation Testing)"

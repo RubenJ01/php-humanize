@@ -1,6 +1,6 @@
 <?php
 
-namespace Rjds\PhpHumanize\Tests\Formatter;
+namespace Rjds\PhpHumanize\Tests\Formatter\Text;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -45,6 +45,7 @@ class PluralizeFormatterTest extends TestCase
     public function testItCastsQuantityAndWordArguments(): void
     {
         self::assertSame('0 s', $this->formatter->format('foo'));
+        self::assertSame('0 s', $this->formatter->format([]));
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Singular form must be a string');

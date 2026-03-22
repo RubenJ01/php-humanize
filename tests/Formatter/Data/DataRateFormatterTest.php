@@ -1,6 +1,6 @@
 <?php
 
-namespace Rjds\PhpHumanize\Tests\Formatter;
+namespace Rjds\PhpHumanize\Tests\Formatter\Data;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -58,5 +58,7 @@ class DataRateFormatterTest extends TestCase
     {
         self::assertSame('0 B/s', $this->formatter->format('foo'));
         self::assertSame('2 KB/s', $this->formatter->format(1536, '0foo'));
+        self::assertSame('0 B/s', $this->formatter->format([]));
+        self::assertSame('1.6 KB/s', $this->formatter->format(1601, []));
     }
 }

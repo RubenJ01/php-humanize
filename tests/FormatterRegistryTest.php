@@ -94,11 +94,31 @@ class FormatterRegistryTest extends TestCase
         $registry = new FormatterRegistry();
         $directory = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'php-humanize-autodiscover-' . uniqid('', true);
         $namespace = 'Rjds\\PhpHumanize\\Tests\\AutoDiscover';
+        $nestedDirectory = $directory . DIRECTORY_SEPARATOR . 'Nested';
 
         mkdir($directory, 0777, true);
+        mkdir($nestedDirectory, 0777, true);
 
         try {
-            file_put_contents($directory . DIRECTORY_SEPARATOR . 'FormatterInterface.php', "<?php\n");
+            file_put_contents($directory . DIRECTORY_SEPARATOR . 'FormatterInterface.php', <<<PHP
+<?php
+
+namespace {$namespace};
+
+class FormatterInterface implements \Rjds\PhpHumanize\Formatter\FormatterInterface
+{
+    public function format(...\$args): string
+    {
+        return 'should-not-register';
+    }
+
+    public function getName(): string
+    {
+        return 'shouldNotRegister';
+    }
+}
+PHP
+            );
             file_put_contents($directory . DIRECTORY_SEPARATOR . 'NotPhp.txt', 'ignored');
             file_put_contents($directory . DIRECTORY_SEPARATOR . 'MissingFormatter.php', "<?php\n");
 
@@ -148,16 +168,45 @@ interface InterfaceAutoFormatter extends \Rjds\PhpHumanize\Formatter\FormatterIn
 PHP
             );
 
+            file_put_contents($nestedDirectory . DIRECTORY_SEPARATOR . 'DeepFormatter.php', <<<PHP
+<?php
+
+namespace {$namespace}\\Nested;
+
+class DeepFormatter implements \Rjds\PhpHumanize\Formatter\FormatterInterface
+{
+    public function format(...\$args): string
+    {
+        return 'deep';
+    }
+
+    public function getName(): string
+    {
+        return 'deep';
+    }
+}
+PHP
+            );
+
+            require_once $directory . DIRECTORY_SEPARATOR . 'FormatterInterface.php';
             require_once $directory . DIRECTORY_SEPARATOR . 'ZzzAutoFormatter.php';
             require_once $directory . DIRECTORY_SEPARATOR . 'AbstractAutoFormatter.php';
             require_once $directory . DIRECTORY_SEPARATOR . 'InterfaceAutoFormatter.php';
+            require_once $nestedDirectory . DIRECTORY_SEPARATOR . 'DeepFormatter.php';
 
             $result = $registry->autoDiscover($directory, $namespace);
 
             self::assertSame($registry, $result);
             self::assertTrue($registry->has('discovered'));
+            self::assertTrue($registry->has('deep'));
+            self::assertFalse($registry->has('shouldNotRegister'));
             self::assertSame('discovered', $registry->get('discovered')->format());
-            self::assertSame(['discovered'], $registry->getNames());
+            self::assertSame('deep', $registry->get('deep')->format());
+
+            $names = $registry->getNames();
+            sort($names);
+
+            self::assertSame(['deep', 'discovered'], $names);
         } finally {
             $this->deleteDirectory($directory);
         }

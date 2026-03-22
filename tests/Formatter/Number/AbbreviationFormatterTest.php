@@ -1,6 +1,6 @@
 <?php
 
-namespace Rjds\PhpHumanize\Tests\Formatter;
+namespace Rjds\PhpHumanize\Tests\Formatter\Number;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -60,5 +60,6 @@ class AbbreviationFormatterTest extends TestCase
     public function testItCastsPrecisionToInteger(): void
     {
         self::assertSame('2K', $this->formatter->format(1500, '0foo'));
+        self::assertSame('1.3K', $this->formatter->format(1250, []));
     }
 }
