@@ -1,6 +1,8 @@
 <?php
 
-namespace Rjds\PhpHumanize\Formatter;
+namespace Rjds\PhpHumanize\Formatter\Number;
+
+use Rjds\PhpHumanize\Formatter\FormatterInterface;
 
 class OrdinalFormatter implements FormatterInterface
 {

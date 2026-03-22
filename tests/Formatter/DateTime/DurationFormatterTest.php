@@ -4,7 +4,7 @@ namespace Rjds\PhpHumanize\Tests\Formatter\DateTime;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Rjds\PhpHumanize\Formatter\DurationFormatter;
+use Rjds\PhpHumanize\Formatter\DateTime\DurationFormatter;
 
 class DurationFormatterTest extends TestCase
 {

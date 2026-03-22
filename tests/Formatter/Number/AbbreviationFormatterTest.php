@@ -4,7 +4,7 @@ namespace Rjds\PhpHumanize\Tests\Formatter\Number;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Rjds\PhpHumanize\Formatter\AbbreviationFormatter;
+use Rjds\PhpHumanize\Formatter\Number\AbbreviationFormatter;
 
 class AbbreviationFormatterTest extends TestCase
 {

@@ -4,19 +4,19 @@ namespace Rjds\PhpHumanize\Tests\Formatter;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Rjds\PhpHumanize\Formatter\AbbreviationFormatter;
-use Rjds\PhpHumanize\Formatter\DataRateFormatter;
-use Rjds\PhpHumanize\Formatter\DateLocalizedFormatter;
-use Rjds\PhpHumanize\Formatter\DurationFormatter;
-use Rjds\PhpHumanize\Formatter\FileSizeFormatter;
+use Rjds\PhpHumanize\Formatter\Data\DataRateFormatter;
+use Rjds\PhpHumanize\Formatter\Data\FileSizeFormatter;
+use Rjds\PhpHumanize\Formatter\DateTime\DateFormatter;
+use Rjds\PhpHumanize\Formatter\DateTime\DurationFormatter;
+use Rjds\PhpHumanize\Formatter\DateTime\TimeDiffFormatter;
 use Rjds\PhpHumanize\Formatter\FormatterInterface;
-use Rjds\PhpHumanize\Formatter\ListJoinFormatter;
-use Rjds\PhpHumanize\Formatter\NumberFormatter;
-use Rjds\PhpHumanize\Formatter\NumberToWordsFormatter;
-use Rjds\PhpHumanize\Formatter\OrdinalFormatter;
-use Rjds\PhpHumanize\Formatter\PluralizeFormatter;
-use Rjds\PhpHumanize\Formatter\TextTruncationFormatter;
-use Rjds\PhpHumanize\Formatter\TimeDiffFormatter;
+use Rjds\PhpHumanize\Formatter\Number\AbbreviationFormatter;
+use Rjds\PhpHumanize\Formatter\Number\NumberFormatter;
+use Rjds\PhpHumanize\Formatter\Number\NumberToWordsFormatter;
+use Rjds\PhpHumanize\Formatter\Number\OrdinalFormatter;
+use Rjds\PhpHumanize\Formatter\Text\ListJoinFormatter;
+use Rjds\PhpHumanize\Formatter\Text\PluralizeFormatter;
+use Rjds\PhpHumanize\Formatter\Text\TextTruncationFormatter;
 use ReflectionClass;
 
 class FormatterMetadataTest extends TestCase
@@ -33,7 +33,7 @@ class FormatterMetadataTest extends TestCase
         NumberToWordsFormatter::class => 'toWords',
         DurationFormatter::class => 'duration',
         TextTruncationFormatter::class => 'truncate',
-        DateLocalizedFormatter::class => 'readableDate',
+        DateFormatter::class => 'readableDate',
         NumberFormatter::class => 'number',
     ];
 
@@ -106,7 +106,11 @@ class FormatterMetadataTest extends TestCase
                 continue;
             }
 
-            $className = 'Rjds\\PhpHumanize\\Formatter\\' . $file->getBasename('.php');
+            $relativePath = substr($file->getPathname(), strlen(__DIR__ . '/../../src/Formatter') + 1);
+
+
+            $relativeClass = str_replace(['/', '\\', '.php'], ['\\', '\\', ''], $relativePath);
+            $className = 'Rjds\\PhpHumanize\\Formatter\\' . $relativeClass;
 
             if (!class_exists($className)) {
                 continue;
@@ -119,6 +123,12 @@ class FormatterMetadataTest extends TestCase
             $reflection = new ReflectionClass($className);
 
             if (!$reflection->isInstantiable() || !$reflection->implementsInterface(FormatterInterface::class)) {
+                continue;
+            }
+
+            $docComment = $reflection->getDocComment();
+
+            if (is_string($docComment) && str_contains($docComment, '@deprecated')) {
                 continue;
             }
 

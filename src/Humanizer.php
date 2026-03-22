@@ -3,24 +3,24 @@
 namespace Rjds\PhpHumanize;
 
 use DateTimeInterface;
-use Rjds\PhpHumanize\Formatter\AbbreviationFormatter;
-use Rjds\PhpHumanize\Formatter\DataRateFormatter;
-use Rjds\PhpHumanize\Formatter\DateLocalizedFormatter;
-use Rjds\PhpHumanize\Formatter\DurationFormatter;
-use Rjds\PhpHumanize\Formatter\FileSizeFormatter;
+use Rjds\PhpHumanize\Formatter\Data\DataRateFormatter;
+use Rjds\PhpHumanize\Formatter\Data\FileSizeFormatter;
+use Rjds\PhpHumanize\Formatter\DateTime\DateFormatter;
+use Rjds\PhpHumanize\Formatter\DateTime\DurationFormatter;
+use Rjds\PhpHumanize\Formatter\DateTime\TimeDiffFormatter;
 use Rjds\PhpHumanize\Formatter\FormatterInterface;
-use Rjds\PhpHumanize\Formatter\ListJoinFormatter;
-use Rjds\PhpHumanize\Formatter\NumberFormatter;
-use Rjds\PhpHumanize\Formatter\NumberToWordsFormatter;
-use Rjds\PhpHumanize\Formatter\OrdinalFormatter;
-use Rjds\PhpHumanize\Formatter\PluralizeFormatter;
-use Rjds\PhpHumanize\Formatter\TextTruncationFormatter;
-use Rjds\PhpHumanize\Formatter\TimeDiffFormatter;
+use Rjds\PhpHumanize\Formatter\Number\AbbreviationFormatter;
+use Rjds\PhpHumanize\Formatter\Number\NumberFormatter;
+use Rjds\PhpHumanize\Formatter\Number\NumberToWordsFormatter;
+use Rjds\PhpHumanize\Formatter\Number\OrdinalFormatter;
+use Rjds\PhpHumanize\Formatter\Text\ListJoinFormatter;
+use Rjds\PhpHumanize\Formatter\Text\PluralizeFormatter;
+use Rjds\PhpHumanize\Formatter\Text\TextTruncationFormatter;
 
 class Humanizer implements HumanizerInterface
 {
-    public const LOCALE_EN = DateLocalizedFormatter::LOCALE_EN;
-    public const LOCALE_NL = DateLocalizedFormatter::LOCALE_NL;
+    public const LOCALE_EN = DateFormatter::LOCALE_EN;
+    public const LOCALE_NL = DateFormatter::LOCALE_NL;
 
     private FormatterRegistry $registry;
 
@@ -39,7 +39,7 @@ class Humanizer implements HumanizerInterface
         ?NumberToWordsFormatter $numberToWordsFormatter = null,
         ?DurationFormatter $durationFormatter = null,
         ?TextTruncationFormatter $textTruncationFormatter = null,
-        ?DateLocalizedFormatter $dateLocalizedFormatter = null,
+        ?DateFormatter $dateFormatter = null,
         ?NumberFormatter $numberFormatter = null,
     ) {
         $this->registry = new FormatterRegistry();
@@ -55,7 +55,7 @@ class Humanizer implements HumanizerInterface
         $this->registry->register('toWords', $numberToWordsFormatter ?? new NumberToWordsFormatter());
         $this->registry->register('duration', $durationFormatter ?? new DurationFormatter());
         $this->registry->register('truncate', $textTruncationFormatter ?? new TextTruncationFormatter());
-        $this->registry->register('readableDate', $dateLocalizedFormatter ?? new DateLocalizedFormatter());
+        $this->registry->register('readableDate', $dateFormatter ?? new DateFormatter());
         $this->registry->register('number', $numberFormatter ?? new NumberFormatter());
     }
 

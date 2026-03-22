@@ -1,6 +1,8 @@
 <?php
 
-namespace Rjds\PhpHumanize\Formatter;
+namespace Rjds\PhpHumanize\Formatter\Text;
+
+use Rjds\PhpHumanize\Formatter\FormatterInterface;
 
 class ListJoinFormatter implements FormatterInterface
 {

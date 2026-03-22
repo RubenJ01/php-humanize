@@ -6,7 +6,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
-use Rjds\PhpHumanize\Formatter\NumberToWordsFormatter;
+use Rjds\PhpHumanize\Formatter\Number\NumberToWordsFormatter;
 
 class NumberToWordsFormatterTest extends TestCase
 {

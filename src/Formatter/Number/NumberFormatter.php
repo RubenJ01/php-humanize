@@ -1,6 +1,10 @@
 <?php
 
-namespace Rjds\PhpHumanize\Formatter;
+namespace Rjds\PhpHumanize\Formatter\Number;
+
+use Rjds\PhpHumanize\Formatter\DateTime\DateFormatter;
+use Rjds\PhpHumanize\Formatter\FormatterInterface;
+use Rjds\PhpHumanize\Formatter\LocaleMap;
 
 class NumberFormatter implements FormatterInterface
 {
@@ -11,11 +15,24 @@ class NumberFormatter implements FormatterInterface
         'nl' => [',', '.'],
     ];
 
+    /**
+     * @var array<string, array{0: string, 1: string}>
+     */
+    private array $localeFormats;
+
+    /**
+     * @param array<string, array{0: string, 1: string}> $localeFormats
+     */
+    public function __construct(array $localeFormats = [])
+    {
+        $this->localeFormats = LocaleMap::withOverrides(self::LOCALE_FORMATS, $localeFormats);
+    }
+
     public function format(...$args): string
     {
         $rawNumber = $args[0] ?? null;
         $rawPrecision = $args[1] ?? null;
-        $rawLocale = $args[2] ?? DateLocalizedFormatter::LOCALE_EN;
+        $rawLocale = $args[2] ?? DateFormatter::LOCALE_EN;
 
         $number = $this->normalizeNumber($rawNumber);
         $precision = $this->normalizePrecision($rawPrecision);
@@ -24,10 +41,9 @@ class NumberFormatter implements FormatterInterface
             throw new \InvalidArgumentException('Third argument must be a non-empty locale string');
         }
 
-        $language = preg_replace('/[_-].*/', '', $rawLocale) ?? DateLocalizedFormatter::LOCALE_EN;
-        $language = strtolower($language);
-        [$decimalSeparator, $thousandsSeparator] = self::LOCALE_FORMATS[$language] ??
-            self::LOCALE_FORMATS[DateLocalizedFormatter::LOCALE_EN];
+        $language = LocaleMap::normalize($rawLocale);
+        [$decimalSeparator, $thousandsSeparator] = $this->localeFormats[$language] ??
+            $this->localeFormats[DateFormatter::LOCALE_EN];
 
         return number_format($number, $precision, $decimalSeparator, $thousandsSeparator);
     }

@@ -4,7 +4,7 @@ namespace Rjds\PhpHumanize\Tests\Formatter\Data;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Rjds\PhpHumanize\Formatter\FileSizeFormatter;
+use Rjds\PhpHumanize\Formatter\Data\FileSizeFormatter;
 
 class FileSizeFormatterTest extends TestCase
 {

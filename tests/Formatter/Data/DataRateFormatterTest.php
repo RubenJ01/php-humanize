@@ -4,7 +4,7 @@ namespace Rjds\PhpHumanize\Tests\Formatter\Data;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Rjds\PhpHumanize\Formatter\DataRateFormatter;
+use Rjds\PhpHumanize\Formatter\Data\DataRateFormatter;
 
 class DataRateFormatterTest extends TestCase
 {

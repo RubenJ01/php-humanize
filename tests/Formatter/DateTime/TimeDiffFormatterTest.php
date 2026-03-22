@@ -6,7 +6,7 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Rjds\PhpHumanize\Formatter\TimeDiffFormatter;
+use Rjds\PhpHumanize\Formatter\DateTime\TimeDiffFormatter;
 
 class TimeDiffFormatterTest extends TestCase
 {

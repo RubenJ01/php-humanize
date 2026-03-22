@@ -1,9 +1,10 @@
 <?php
 
-namespace Rjds\PhpHumanize\Formatter;
+namespace Rjds\PhpHumanize\Formatter\DateTime;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use Rjds\PhpHumanize\Formatter\FormatterInterface;
 
 class TimeDiffFormatter implements FormatterInterface
 {

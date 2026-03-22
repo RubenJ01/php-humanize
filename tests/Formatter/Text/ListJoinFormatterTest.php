@@ -4,7 +4,7 @@ namespace Rjds\PhpHumanize\Tests\Formatter\Text;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Rjds\PhpHumanize\Formatter\ListJoinFormatter;
+use Rjds\PhpHumanize\Formatter\Text\ListJoinFormatter;
 
 class ListJoinFormatterTest extends TestCase
 {
