@@ -74,6 +74,26 @@ echo $humanizer->number(1234567.89, 2); // 1,234,567.89
 echo $humanizer->number(1234567.89, 2, Humanizer::LOCALE_NL); // 1.234.567,89
 ```
 
+### Configure defaults once
+
+```php
+use Rjds\PhpHumanize\Humanizer;
+use Rjds\PhpHumanize\HumanizerConfig;
+
+$config = new HumanizerConfig(
+    locale: Humanizer::LOCALE_NL,
+    numberPrecision: 2,
+    listConjunction: 'of',
+    truncateSuffix: '...'
+);
+
+$humanizer = new Humanizer(config: $config);
+
+echo $humanizer->number(1234.56); // 1.234,56
+echo $humanizer->joinList(['Alice', 'Bob']); // Alice of Bob
+echo $humanizer->truncate('The quick brown fox jumps', 20); // The quick brown fox...
+```
+
 ### Time differences
 
 ```php

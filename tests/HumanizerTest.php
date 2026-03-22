@@ -19,6 +19,7 @@ use Rjds\PhpHumanize\Formatter\Text\PluralizeFormatter;
 use Rjds\PhpHumanize\Formatter\Text\TextTruncationFormatter;
 use Rjds\PhpHumanize\FormatterRegistry;
 use Rjds\PhpHumanize\Humanizer;
+use Rjds\PhpHumanize\HumanizerConfig;
 use RuntimeException;
 
 class HumanizerTest extends TestCase
@@ -104,6 +105,14 @@ class HumanizerTest extends TestCase
         self::assertSame('Monday 30 March 2026', $this->humanizer->readableDate($dateTime, null));
     }
 
+    public function testReadableDateUsesConfiguredDefaultLocale(): void
+    {
+        $humanizer = new Humanizer(config: new HumanizerConfig(locale: Humanizer::LOCALE_NL));
+        $dateTime = new DateTimeImmutable('2026-03-30 10:00:00+00:00');
+
+        self::assertSame('Maandag 30 maart 2026', $humanizer->readableDate($dateTime));
+    }
+
     public function testItDelegatesToNumberFormatter(): void
     {
         self::assertSame('1.234,57', $this->humanizer->number(1234.567, 2, Humanizer::LOCALE_NL));
@@ -112,6 +121,42 @@ class HumanizerTest extends TestCase
     public function testNumberUsesZeroPrecisionByDefault(): void
     {
         self::assertSame('1,235', $this->humanizer->number(1234.56));
+    }
+
+    public function testNumberUsesConfiguredDefaultsWhenPrecisionAndLocaleAreOmitted(): void
+    {
+        $config = new HumanizerConfig(locale: Humanizer::LOCALE_NL, numberPrecision: 2);
+        $humanizer = new Humanizer(config: $config);
+
+        self::assertSame('1.234,56', $humanizer->number(1234.56));
+    }
+
+    public function testJoinListUsesConfiguredDefaultConjunction(): void
+    {
+        $humanizer = new Humanizer(config: new HumanizerConfig(listConjunction: 'or'));
+
+        self::assertSame('Alice or Bob', $humanizer->joinList(['Alice', 'Bob']));
+    }
+
+    public function testJoinListExplicitConjunctionOverridesConfiguredDefault(): void
+    {
+        $humanizer = new Humanizer(config: new HumanizerConfig(listConjunction: 'or'));
+
+        self::assertSame('Alice and Bob', $humanizer->joinList(['Alice', 'Bob'], 'and'));
+    }
+
+    public function testTruncateUsesConfiguredDefaultSuffix(): void
+    {
+        $humanizer = new Humanizer(config: new HumanizerConfig(truncateSuffix: '...'));
+
+        self::assertSame('The quick brown fox...', $humanizer->truncate('The quick brown fox jumps', 20));
+    }
+
+    public function testTruncateExplicitSuffixOverridesConfiguredDefault(): void
+    {
+        $humanizer = new Humanizer(config: new HumanizerConfig(truncateSuffix: '...'));
+
+        self::assertSame('The quick brown fox!!!', $humanizer->truncate('The quick brown fox jumps', 20, '!!!'));
     }
 
     public function testItExposesFormatterRegistry(): void

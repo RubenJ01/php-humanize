@@ -23,9 +23,10 @@ class Humanizer implements HumanizerInterface
     public const LOCALE_NL = DateFormatter::LOCALE_NL;
 
     private FormatterRegistry $registry;
+    private HumanizerConfig $config;
 
     /**
-     * Constructor accepts optional formatters for dependency injection.
+     * Constructor accepts optional formatters for dependency injection and optional defaults via config.
      * If no formatters are provided, default formatters are auto-registered.
      */
     public function __construct(
@@ -41,8 +42,10 @@ class Humanizer implements HumanizerInterface
         ?TextTruncationFormatter $textTruncationFormatter = null,
         ?DateFormatter $dateFormatter = null,
         ?NumberFormatter $numberFormatter = null,
+        ?HumanizerConfig $config = null,
     ) {
         $this->registry = new FormatterRegistry();
+        $this->config = $config ?? new HumanizerConfig();
 
         // Register formatters - use provided instances or create defaults
         $this->registry->register('fileSize', $fileSizeFormatter ?? new FileSizeFormatter());
@@ -108,9 +111,13 @@ class Humanizer implements HumanizerInterface
     /**
      * @param array<int, string> $items
      */
-    public function joinList(array $items, string $conjunction = 'and', string $separator = ', '): string
+    public function joinList(array $items, ?string $conjunction = null, string $separator = ', '): string
     {
-        return $this->registry->get('joinList')->format($items, $conjunction, $separator);
+        return $this->registry->get('joinList')->format(
+            $items,
+            $conjunction ?? $this->config->getListConjunction(),
+            $separator
+        );
     }
 
     public function pluralize(int $quantity, string $singular, ?string $plural = null): string
@@ -128,22 +135,30 @@ class Humanizer implements HumanizerInterface
         return $this->registry->get('duration')->format($seconds, $precision);
     }
 
-    public function truncate(string $text, int $maxLength, string $suffix = '…'): string
+    public function truncate(string $text, int $maxLength, ?string $suffix = null): string
     {
-        return $this->registry->get('truncate')->format($text, $maxLength, $suffix);
+        return $this->registry->get('truncate')->format(
+            $text,
+            $maxLength,
+            $suffix ?? $this->config->getTruncateSuffix()
+        );
     }
 
     public function readableDate(DateTimeInterface $dateTime, ?string $locale = null): string
     {
-        return $this->registry->get('readableDate')->format($dateTime, $locale ?? self::LOCALE_EN);
+        return $this->registry->get('readableDate')->format($dateTime, $locale ?? $this->config->getLocale());
     }
 
     public function number(
         float|int $number,
-        int $precision = self::DEFAULT_NUMBER_PRECISION,
+        ?int $precision = null,
         ?string $locale = null
     ): string {
-        return $this->registry->get('number')->format($number, $precision, $locale ?? self::LOCALE_EN);
+        return $this->registry->get('number')->format(
+            $number,
+            $precision ?? $this->config->getNumberPrecision(),
+            $locale ?? $this->config->getLocale()
+        );
     }
 
     /**
