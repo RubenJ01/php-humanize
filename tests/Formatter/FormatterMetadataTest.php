@@ -91,16 +91,22 @@ class FormatterMetadataTest extends TestCase
      */
     private static function discoverBuiltInFormatters(): array
     {
-        $files = glob(__DIR__ . '/../../src/Formatter/*.php');
-
-        if ($files === false) {
-            return [];
-        }
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator(__DIR__ . '/../../src/Formatter')
+        );
 
         $formatters = [];
 
-        foreach ($files as $file) {
-            $className = 'Rjds\\PhpHumanize\\Formatter\\' . pathinfo($file, PATHINFO_FILENAME);
+        foreach ($iterator as $file) {
+            if (!$file instanceof \SplFileInfo || !$file->isFile()) {
+                continue;
+            }
+
+            if ($file->getExtension() !== 'php') {
+                continue;
+            }
+
+            $className = 'Rjds\\PhpHumanize\\Formatter\\' . $file->getBasename('.php');
 
             if (!class_exists($className)) {
                 continue;

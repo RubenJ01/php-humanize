@@ -1,6 +1,6 @@
 <?php
 
-namespace Rjds\PhpHumanize\Tests\Formatter;
+namespace Rjds\PhpHumanize\Tests\Formatter\DateTime;
 
 use DateTimeImmutable;
 use InvalidArgumentException;

@@ -6,7 +6,10 @@
     "autoload": {
         "psr-4": {
             "Rjds\\PhpHumanize\\": "src/"
-        }
+        },
+        "classmap": [
+            "src/Formatter/"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

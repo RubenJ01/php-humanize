@@ -13,7 +13,7 @@ steps:
       - echo "══════ PHP CodeSniffer (PSR-12) ══════"
       - vendor/bin/phpcs --standard=PSR12 src/
       - echo "══════ PHPStan (Level 9) ══════"
-      - vendor/bin/phpstan analyse --configuration=phpstan.neon --no-progress
+      - vendor/bin/phpstan analyse --configuration=phpstan.neon --no-progress --memory-limit=-1
       - echo "══════ PHPUnit ══════"
       - pecl install pcov > /dev/null 2>&1 && docker-php-ext-enable pcov
       - vendor/bin/phpunit --colors=always --coverage-clover=coverage.xml

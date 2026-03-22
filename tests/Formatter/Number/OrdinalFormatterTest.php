@@ -1,6 +1,6 @@
 <?php
 
-namespace Rjds\PhpHumanize\Tests\Formatter;
+namespace Rjds\PhpHumanize\Tests\Formatter\Number;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -50,5 +50,6 @@ class OrdinalFormatterTest extends TestCase
     public function testItCastsInputToInteger(): void
     {
         self::assertSame('0th', $this->formatter->format('foo'));
+        self::assertSame('0th', $this->formatter->format([]));
     }
 }

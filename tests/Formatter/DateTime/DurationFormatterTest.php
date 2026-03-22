@@ -1,6 +1,6 @@
 <?php
 
-namespace Rjds\PhpHumanize\Tests\Formatter;
+namespace Rjds\PhpHumanize\Tests\Formatter\DateTime;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -66,5 +66,7 @@ class DurationFormatterTest extends TestCase
     {
         self::assertSame('0 seconds', $this->formatter->format('foo'));
         self::assertSame('1 hour', $this->formatter->format(3661, '1foo'));
+        self::assertSame('0 seconds', $this->formatter->format([]));
+        self::assertSame('1 hour, 1 minute, 1 second', $this->formatter->format(3661, []));
     }
 }

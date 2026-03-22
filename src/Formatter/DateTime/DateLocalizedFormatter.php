@@ -89,12 +89,7 @@ class DateLocalizedFormatter implements FormatterInterface
 
     private function formatWithFallbackTranslations(DateTimeInterface $dateTime, string $locale): string
     {
-        $language = preg_replace('/[_-].*/', '', $locale);
-
-        if (!is_string($language)) {
-            $language = self::LOCALE_EN;
-        }
-
+        $language = preg_replace('/[_-].*/', '', $locale) ?? self::LOCALE_EN;
         $language = strtolower($language);
         $translations = self::FALLBACK_TRANSLATIONS[$language] ?? self::FALLBACK_TRANSLATIONS[self::LOCALE_EN];
 

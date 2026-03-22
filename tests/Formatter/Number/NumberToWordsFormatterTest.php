@@ -1,6 +1,6 @@
 <?php
 
-namespace Rjds\PhpHumanize\Tests\Formatter;
+namespace Rjds\PhpHumanize\Tests\Formatter\Number;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -75,5 +75,6 @@ class NumberToWordsFormatterTest extends TestCase
     public function testItCastsNumericInputArgument(): void
     {
         self::assertSame('zero', $this->formatter->format('foo'));
+        self::assertSame('zero', $this->formatter->format([]));
     }
 }
