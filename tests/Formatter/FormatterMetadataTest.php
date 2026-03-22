@@ -14,6 +14,7 @@ use Rjds\PhpHumanize\Formatter\Number\AbbreviationFormatter;
 use Rjds\PhpHumanize\Formatter\Number\NumberFormatter;
 use Rjds\PhpHumanize\Formatter\Number\NumberToWordsFormatter;
 use Rjds\PhpHumanize\Formatter\Number\OrdinalFormatter;
+use Rjds\PhpHumanize\Formatter\Number\PercentageFormatter;
 use Rjds\PhpHumanize\Formatter\Text\ListJoinFormatter;
 use Rjds\PhpHumanize\Formatter\Text\PluralizeFormatter;
 use Rjds\PhpHumanize\Formatter\Text\TextTruncationFormatter;
@@ -35,6 +36,7 @@ class FormatterMetadataTest extends TestCase
         TextTruncationFormatter::class => 'truncate',
         DateFormatter::class => 'readableDate',
         NumberFormatter::class => 'number',
+        PercentageFormatter::class => 'percentage',
     ];
 
     /**

@@ -13,6 +13,7 @@ use Rjds\PhpHumanize\Formatter\Number\AbbreviationFormatter;
 use Rjds\PhpHumanize\Formatter\Number\NumberFormatter;
 use Rjds\PhpHumanize\Formatter\Number\NumberToWordsFormatter;
 use Rjds\PhpHumanize\Formatter\Number\OrdinalFormatter;
+use Rjds\PhpHumanize\Formatter\Number\PercentageFormatter;
 use Rjds\PhpHumanize\Formatter\Text\ListJoinFormatter;
 use Rjds\PhpHumanize\Formatter\Text\PluralizeFormatter;
 use Rjds\PhpHumanize\Formatter\Text\TextTruncationFormatter;
@@ -43,6 +44,7 @@ class Humanizer implements HumanizerInterface
         ?DateFormatter $dateFormatter = null,
         ?NumberFormatter $numberFormatter = null,
         ?HumanizerConfig $config = null,
+        ?PercentageFormatter $percentageFormatter = null,
     ) {
         $this->registry = new FormatterRegistry();
         $this->config = $config ?? new HumanizerConfig();
@@ -60,6 +62,7 @@ class Humanizer implements HumanizerInterface
         $this->registry->register('truncate', $textTruncationFormatter ?? new TextTruncationFormatter());
         $this->registry->register('readableDate', $dateFormatter ?? new DateFormatter());
         $this->registry->register('number', $numberFormatter ?? new NumberFormatter());
+        $this->registry->register('percentage', $percentageFormatter ?? new PercentageFormatter());
     }
 
     /**
@@ -158,6 +161,20 @@ class Humanizer implements HumanizerInterface
             $number,
             $precision ?? $this->config->getNumberPrecision(),
             $locale ?? $this->config->getLocale()
+        );
+    }
+
+    public function percentage(
+        float|int $value,
+        ?int $precision = null,
+        ?string $locale = null,
+        bool $fromFraction = true
+    ): string {
+        return $this->registry->get('percentage')->format(
+            $value,
+            $precision ?? $this->config->getNumberPrecision(),
+            $locale ?? $this->config->getLocale(),
+            $fromFraction
         );
     }
 

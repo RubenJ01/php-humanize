@@ -14,6 +14,7 @@ use Rjds\PhpHumanize\Formatter\Number\AbbreviationFormatter;
 use Rjds\PhpHumanize\Formatter\Number\NumberFormatter;
 use Rjds\PhpHumanize\Formatter\Number\NumberToWordsFormatter;
 use Rjds\PhpHumanize\Formatter\Number\OrdinalFormatter;
+use Rjds\PhpHumanize\Formatter\Number\PercentageFormatter;
 use Rjds\PhpHumanize\Formatter\Text\ListJoinFormatter;
 use Rjds\PhpHumanize\Formatter\Text\PluralizeFormatter;
 use Rjds\PhpHumanize\Formatter\Text\TextTruncationFormatter;
@@ -129,6 +130,24 @@ class HumanizerTest extends TestCase
         $humanizer = new Humanizer(config: $config);
 
         self::assertSame('1.234,56', $humanizer->number(1234.56));
+    }
+
+    public function testItDelegatesToPercentageFormatter(): void
+    {
+        self::assertSame('15,3%', $this->humanizer->percentage(0.153, 1, Humanizer::LOCALE_NL));
+    }
+
+    public function testPercentageUsesConfiguredDefaultsWhenPrecisionAndLocaleAreOmitted(): void
+    {
+        $config = new HumanizerConfig(locale: Humanizer::LOCALE_NL, numberPrecision: 1);
+        $humanizer = new Humanizer(config: $config);
+
+        self::assertSame('15,3%', $humanizer->percentage(0.153));
+    }
+
+    public function testPercentageCanFormatDirectValuesWhenFromFractionIsFalse(): void
+    {
+        self::assertSame('15.3%', $this->humanizer->percentage(15.3, 1, Humanizer::LOCALE_EN, false));
     }
 
     public function testJoinListUsesConfiguredDefaultConjunction(): void
@@ -322,6 +341,13 @@ class HumanizerTest extends TestCase
                     return 'num';
                 }
             },
+            null,
+            new class extends PercentageFormatter {
+                public function format(...$args): string
+                {
+                    return 'pct';
+                }
+            },
         );
 
         self::assertSame('fs', $humanizer->fileSize(1));
@@ -336,5 +362,6 @@ class HumanizerTest extends TestCase
         self::assertSame('trunc', $humanizer->truncate('abc', 1));
         self::assertSame('date', $humanizer->readableDate(new DateTimeImmutable()));
         self::assertSame('num', $humanizer->number(1));
+        self::assertSame('pct', $humanizer->percentage(0.1));
     }
 }
