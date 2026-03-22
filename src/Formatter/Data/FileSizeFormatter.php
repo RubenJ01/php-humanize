@@ -1,6 +1,8 @@
 <?php
 
-namespace Rjds\PhpHumanize\Formatter;
+namespace Rjds\PhpHumanize\Formatter\Data;
+
+use Rjds\PhpHumanize\Formatter\FormatterInterface;
 
 class FileSizeFormatter implements FormatterInterface
 {

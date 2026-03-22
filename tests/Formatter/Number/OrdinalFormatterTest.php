@@ -4,7 +4,7 @@ namespace Rjds\PhpHumanize\Tests\Formatter\Number;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Rjds\PhpHumanize\Formatter\OrdinalFormatter;
+use Rjds\PhpHumanize\Formatter\Number\OrdinalFormatter;
 
 class OrdinalFormatterTest extends TestCase
 {

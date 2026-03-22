@@ -4,7 +4,7 @@ namespace Rjds\PhpHumanize\Tests\Formatter\Text;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Rjds\PhpHumanize\Formatter\TextTruncationFormatter;
+use Rjds\PhpHumanize\Formatter\Text\TextTruncationFormatter;
 
 class TextTruncationFormatterTest extends TestCase
 {

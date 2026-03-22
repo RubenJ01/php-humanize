@@ -4,19 +4,19 @@ namespace Rjds\PhpHumanize\Tests;
 
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
-use Rjds\PhpHumanize\Formatter\AbbreviationFormatter;
-use Rjds\PhpHumanize\Formatter\DataRateFormatter;
-use Rjds\PhpHumanize\Formatter\DateLocalizedFormatter;
-use Rjds\PhpHumanize\Formatter\DurationFormatter;
-use Rjds\PhpHumanize\Formatter\FileSizeFormatter;
+use Rjds\PhpHumanize\Formatter\Data\DataRateFormatter;
+use Rjds\PhpHumanize\Formatter\Data\FileSizeFormatter;
+use Rjds\PhpHumanize\Formatter\DateTime\DateFormatter;
+use Rjds\PhpHumanize\Formatter\DateTime\DurationFormatter;
+use Rjds\PhpHumanize\Formatter\DateTime\TimeDiffFormatter;
 use Rjds\PhpHumanize\Formatter\FormatterInterface;
-use Rjds\PhpHumanize\Formatter\ListJoinFormatter;
-use Rjds\PhpHumanize\Formatter\NumberFormatter;
-use Rjds\PhpHumanize\Formatter\NumberToWordsFormatter;
-use Rjds\PhpHumanize\Formatter\OrdinalFormatter;
-use Rjds\PhpHumanize\Formatter\PluralizeFormatter;
-use Rjds\PhpHumanize\Formatter\TextTruncationFormatter;
-use Rjds\PhpHumanize\Formatter\TimeDiffFormatter;
+use Rjds\PhpHumanize\Formatter\Number\AbbreviationFormatter;
+use Rjds\PhpHumanize\Formatter\Number\NumberFormatter;
+use Rjds\PhpHumanize\Formatter\Number\NumberToWordsFormatter;
+use Rjds\PhpHumanize\Formatter\Number\OrdinalFormatter;
+use Rjds\PhpHumanize\Formatter\Text\ListJoinFormatter;
+use Rjds\PhpHumanize\Formatter\Text\PluralizeFormatter;
+use Rjds\PhpHumanize\Formatter\Text\TextTruncationFormatter;
 use Rjds\PhpHumanize\FormatterRegistry;
 use Rjds\PhpHumanize\Humanizer;
 use RuntimeException;
@@ -83,7 +83,7 @@ class HumanizerTest extends TestCase
         self::assertSame('The quick brown fox…', $this->humanizer->truncate('The quick brown fox jumps', 20));
     }
 
-    public function testItDelegatesToDateLocalizedFormatter(): void
+    public function testItDelegatesToDateFormatter(): void
     {
         $dateTime = new DateTimeImmutable('2026-03-30 10:00:00+00:00');
 
@@ -265,7 +265,7 @@ class HumanizerTest extends TestCase
                     return 'trunc';
                 }
             },
-            new class extends DateLocalizedFormatter {
+            new class extends DateFormatter {
                 public function format(...$args): string
                 {
                     return 'date';

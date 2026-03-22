@@ -1,6 +1,8 @@
 <?php
 
-namespace Rjds\PhpHumanize\Formatter;
+namespace Rjds\PhpHumanize\Formatter\DateTime;
+
+use Rjds\PhpHumanize\Formatter\FormatterInterface;
 
 class DurationFormatter implements FormatterInterface
 {

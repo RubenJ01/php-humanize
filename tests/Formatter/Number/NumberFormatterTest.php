@@ -5,7 +5,7 @@ namespace Rjds\PhpHumanize\Tests\Formatter\Number;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Rjds\PhpHumanize\Formatter\NumberFormatter;
+use Rjds\PhpHumanize\Formatter\Number\NumberFormatter;
 
 class NumberFormatterTest extends TestCase
 {
@@ -48,6 +48,33 @@ class NumberFormatterTest extends TestCase
         self::assertSame('1,235', $this->formatter->format(1234.56));
     }
 
+    public function testItSupportsInjectedCustomLocaleFormats(): void
+    {
+        $formatter = new NumberFormatter([
+            'fr' => [',', ' '],
+        ]);
+
+        self::assertSame('1 234,5', $formatter->format(1234.5, 1, 'fr_FR'));
+    }
+
+    public function testItAllowsOverridingBuiltInLocaleFormats(): void
+    {
+        $formatter = new NumberFormatter([
+            'en' => [',', ' '],
+        ]);
+
+        self::assertSame('1 234,5', $formatter->format(1234.5, 1, 'en'));
+    }
+
+    public function testItIgnoresInjectedFormatsWithEmptyLocaleKey(): void
+    {
+        $formatter = new NumberFormatter([
+            '' => [',', ' '],
+        ]);
+
+        self::assertSame('1,234.5', $formatter->format(1234.5, 1, 'en'));
+    }
+
     public function testItDefaultsToZeroWhenNoArgumentsAreProvided(): void
     {
         self::assertSame('0', $this->formatter->format());
@@ -84,5 +111,15 @@ class NumberFormatterTest extends TestCase
         $this->expectExceptionMessage('Third argument must be a non-empty locale string');
 
         $this->formatter->format(1234, 0, '   ');
+    }
+
+    public function testItAppliesValidOverridesAfterAnEmptyLocaleKey(): void
+    {
+        $formatter = new NumberFormatter([
+            '' => [',', ' '],
+            'fr' => [',', ' '],
+        ]);
+
+        self::assertSame('1 234,5', $formatter->format(1234.5, 1, 'fr'));
     }
 }
