@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.3.0](https://github.com/RubenJ01/php-humanize/compare/v2.2.0...v2.3.0) (2026-03-22)
+
+
+### Features
+
+* **config:** add HumanizerConfig for centralized defaults ([#45](https://github.com/RubenJ01/php-humanize/issues/45)) ([d71550d](https://github.com/RubenJ01/php-humanize/commit/d71550d3c53261ac7f8254138ec330aea82ea3b4))
+* **formatters:** added a localized formatter for numbers ([#41](https://github.com/RubenJ01/php-humanize/issues/41)) ([3266967](https://github.com/RubenJ01/php-humanize/commit/32669671143ceaff2e708cd32f85af3da0a6a646))
+* **formatters:** added a localized formatter for percentages ([#47](https://github.com/RubenJ01/php-humanize/issues/47)) ([a852eb0](https://github.com/RubenJ01/php-humanize/commit/a852eb0d8615f2f677edec4240d5102670922c8e))
+
 ## [2.2.0](https://github.com/RubenJ01/php-humanize/compare/v2.1.0...v2.2.0) (2026-03-20)
 
 
