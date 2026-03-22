@@ -31,6 +31,7 @@ $humanizer->dataRate(1536);                   // "1.5 KB/s"
 $humanizer->ordinal(21);                      // "21st"
 $humanizer->abbreviate(2300000);              // "2.3M"
 $humanizer->number(1234567.89, 2, Humanizer::LOCALE_NL); // "1.234.567,89"
+$humanizer->percentage(0.153, 1);             // "15.3%"
 $humanizer->toWords(42);                      // "forty-two"
 $humanizer->duration(3661);                   // "1 hour, 1 minute, 1 second"
 $humanizer->diffForHumans($fiveMinutesAgo);   // "5 minutes ago"
@@ -64,6 +65,7 @@ $config = new HumanizerConfig(
 $humanizer = new Humanizer(config: $config);
 
 echo $humanizer->number(1234.56);           // 1.234,56
+echo $humanizer->percentage(0.125);         // 12,50%
 echo $humanizer->joinList(['A', 'B']);      // A or B
 echo $humanizer->truncate('long text', 5); // lo...
 ```

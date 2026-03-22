@@ -62,6 +62,23 @@ interface HumanizerInterface
     ): string;
 
     /**
+     * Format a value as a locale-aware percentage string.
+     *
+     * @param float|int $value
+     * @param int|null $precision Defaults to configured precision when null.
+     * @param string|null $locale Locale identifier like en, en_US, nl, or nl_NL.
+     *                            Defaults to configured locale when null.
+     * @param bool $fromFraction When true, value is treated as a ratio (0.42 => 42%).
+     * @return string
+     */
+    public function percentage(
+        float|int $value,
+        ?int $precision = null,
+        ?string $locale = null,
+        bool $fromFraction = true
+    ): string;
+
+    /**
      * Express a datetime as a human-readable difference from now.
      *
      * @param DateTimeInterface $dateTime
