@@ -56,7 +56,7 @@ jobs:
             -   name: Run backward compatibility check
                 uses: docker://nyholm/roave-bc-check:latest
                 with:
-                    args: roave-backward-compatibility-check --from=origin/${{ github.base_ref || 'main' }} --format=github-actions
+                    args: roave-backwards-compatibility-check:assert-backwards-compatible --from=origin/${{ github.base_ref || 'main' }} --format=github-actions
     coverage:
         runs-on: ubuntu-latest
         needs: test
