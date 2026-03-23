@@ -65,7 +65,7 @@
    git push -u origin feat/my-feature
    ```
 
-   Woodpecker CI will run phpcs, phpstan, and phpunit on the PR automatically.
+   GitHub Actions will run all required checks on the PR, including backward compatibility verification.
 
 8. **Merge with squash merge** on GitHub
 
@@ -91,5 +91,3 @@ New formatters should be added to `src/Formatter/` and must:
 5. **Register the formatter** in `src/Humanizer.php` constructor
 
 Note: For custom formatters that you want to distribute separately, you don't need to modify the core library. Just implement `FormatterInterface` and users can register it with `$humanizer->register('name', $formatter)`.
-
-
