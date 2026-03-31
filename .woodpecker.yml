@@ -7,9 +7,10 @@ steps:
     environment:
       DEBIAN_FRONTEND: noninteractive
     commands:
-      - apt-get update -qq && apt-get install -y -qq git unzip > /dev/null 2>&1
+      - apt-get update -qq && apt-get install -y -qq git unzip libicu-dev > /dev/null 2>&1
+      - docker-php-ext-install -j"$(nproc)" intl > /dev/null 2>&1
       - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-      - composer update --no-interaction --prefer-dist --quiet
+      - composer install --no-interaction --prefer-dist --quiet
       - vendor/bin/phpcs --standard=PSR12 src/
       - vendor/bin/phpstan analyse --configuration=phpstan.neon --no-progress --memory-limit=-1
       - pecl install pcov > /dev/null 2>&1 && docker-php-ext-enable pcov
