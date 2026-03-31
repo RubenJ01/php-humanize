@@ -4,6 +4,9 @@ on:
         branches: [ main ]
     pull_request:
         branches: [ main ]
+permissions:
+    contents: read
+    pull-requests: write
 jobs:
     test:
         runs-on: ubuntu-latest
@@ -57,8 +60,25 @@ jobs:
                 run: git config --global --add safe.directory /github/workspace
 
             -   name: Run backward compatibility check
+                id: bc
+                continue-on-error: true
                 run: |
-                  docker run --rm -v "$GITHUB_WORKSPACE:/app" -w /app nyholm/roave-bc-check:latest roave-backwards-compatibility-check:assert-backwards-compatible --from=origin/${{ github.base_ref || 'main' }} --format=github-actions
+                  docker run --rm -v "$GITHUB_WORKSPACE:/app" -w /app nyholm/roave-bc-check:latest roave-backwards-compatibility-check:assert-backwards-compatible --from=origin/${{ github.base_ref || 'main' }} --format=github-actions 2>&1 | tee bc-check.log
+
+            -   name: Comment on BC check failure
+                if: steps.bc.outcome == 'failure'
+                uses: marocchino/sticky-pull-request-comment@v2
+                with:
+                    header: backward-compatibility-check
+                    message: |
+                        ❌ Backward compatibility check failed.
+
+                        See the `bc-check` job logs for the detailed report:
+                        ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            -   name: Fail workflow when BC check fails
+                if: steps.bc.outcome == 'failure'
+                run: exit 1
     coverage:
         runs-on: ubuntu-latest
         needs: test
