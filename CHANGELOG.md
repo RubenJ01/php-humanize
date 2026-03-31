@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.0](https://github.com/RubenJ01/php-humanize/compare/v2.3.0...v2.4.0) (2026-03-31)
+
+
+### Features
+
+* add HumanizerFactory for safer formatter configuration ([#49](https://github.com/RubenJ01/php-humanize/issues/49)) ([64afe07](https://github.com/RubenJ01/php-humanize/commit/64afe07655d9a257b9e0fad138fdcf8b00a56793))
+
 ## [2.3.0](https://github.com/RubenJ01/php-humanize/compare/v2.2.0...v2.3.0) (2026-03-22)
 
 
