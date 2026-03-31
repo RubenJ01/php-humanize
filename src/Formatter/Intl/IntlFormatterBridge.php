@@ -18,8 +18,6 @@ final class IntlFormatterBridge
     {
         $formatter = new \NumberFormatter(self::normalizeLocale($locale), \NumberFormatter::DECIMAL);
         $formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $precision);
-        $formatter->setAttribute(\NumberFormatter::MIN_FRACTION_DIGITS, $precision);
-        $formatter->setAttribute(\NumberFormatter::MAX_FRACTION_DIGITS, $precision);
         $formatter->setAttribute(\NumberFormatter::ROUNDING_MODE, \NumberFormatter::ROUND_HALFUP);
 
         $formatted = $formatter->format($number);
@@ -42,7 +40,12 @@ final class IntlFormatterBridge
         );
 
         $formatted = $formatter->format($dateTime);
-        if (!is_string($formatted) || trim($formatted) === '') {
+        if (!is_string($formatted)) {
+            throw new \RuntimeException('Intl failed to format date value.');
+        }
+
+        $formatted = trim($formatted);
+        if ($formatted === '') {
             throw new \RuntimeException('Intl failed to format date value.');
         }
 
@@ -56,28 +59,42 @@ final class IntlFormatterBridge
             return 'en';
         }
 
-        return str_replace('_', '-', $normalized);
+        return $normalized;
     }
 
     private static function normalizeTimezone(string $timezone): string
     {
-        if (preg_match('/^[+-]\d{2}:\d{2}$/', $timezone) === 1) {
+        if (self::isUtcOffsetTimezone($timezone)) {
             return 'UTC';
         }
 
-        if ($timezone === '') {
-            return (new DateTimeZone('UTC'))->getName();
-        }
-
-        return $timezone;
+        return $timezone !== '' ? $timezone : (new DateTimeZone('UTC'))->getName();
     }
 
     private static function normalizeNegativeZero(string $value): string
     {
-        if (preg_match('/^-0(?:[.,]0+)?$/', $value) === 1) {
+        if (!str_starts_with($value, '-0')) {
+            return $value;
+        }
+
+        $normalized = str_replace(',', '.', $value);
+        if ((float) $normalized === 0.0) {
             return ltrim($value, '-');
         }
 
         return $value;
+    }
+
+    private static function isUtcOffsetTimezone(string $timezone): bool
+    {
+        if (strlen($timezone) !== 6) {
+            return false;
+        }
+
+        if (($timezone[0] !== '+' && $timezone[0] !== '-') || $timezone[3] !== ':') {
+            return false;
+        }
+
+        return ctype_digit(substr($timezone, 1, 2)) && ctype_digit(substr($timezone, 4, 2));
     }
 }
