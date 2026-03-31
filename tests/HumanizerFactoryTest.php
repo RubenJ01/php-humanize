@@ -38,7 +38,6 @@ class HumanizerFactoryTest extends TestCase
             $names
         );
     }
-
     public function testFactoryCreatesHumanizerWithDefaults(): void
     {
         $humanizer = HumanizerFactory::create();
