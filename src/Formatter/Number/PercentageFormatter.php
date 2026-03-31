@@ -4,28 +4,16 @@ namespace Rjds\PhpHumanize\Formatter\Number;
 
 use Rjds\PhpHumanize\Formatter\DateTime\DateFormatter;
 use Rjds\PhpHumanize\Formatter\FormatterInterface;
-use Rjds\PhpHumanize\Formatter\LocaleMap;
+use Rjds\PhpHumanize\Formatter\Intl\IntlFormatterBridge;
 
 class PercentageFormatter implements FormatterInterface
 {
     private const MIN_PRECISION = 0;
+    private bool $preferIntl;
 
-    private const LOCALE_FORMATS = [
-        'en' => ['.', ','],
-        'nl' => [',', '.'],
-    ];
-
-    /**
-     * @var array<string, array{0: string, 1: string}>
-     */
-    private array $localeFormats;
-
-    /**
-     * @param array<string, array{0: string, 1: string}> $localeFormats
-     */
-    public function __construct(array $localeFormats = [])
+    public function __construct(bool $preferIntl = true)
     {
-        $this->localeFormats = LocaleMap::withOverrides(self::LOCALE_FORMATS, $localeFormats);
+        $this->preferIntl = $preferIntl;
     }
 
     public function format(...$args): string
@@ -42,15 +30,13 @@ class PercentageFormatter implements FormatterInterface
             throw new \InvalidArgumentException('Third argument must be a non-empty locale string');
         }
 
-        $language = LocaleMap::normalize($rawLocale);
-        [$decimalSeparator, $thousandsSeparator] = $this->localeFormats[$language] ??
-            $this->localeFormats[DateFormatter::LOCALE_EN];
-
         $percentageValue = $fromFraction ? $value * 100 : $value;
-        $formatted = number_format($percentageValue, $precision, $decimalSeparator, $thousandsSeparator);
 
+        if ($this->preferIntl) {
+            return IntlFormatterBridge::formatDecimal($percentageValue, $precision, $rawLocale) . '%';
+        }
 
-        return $formatted . '%';
+        return IntlFormatterBridge::formatDecimal($percentageValue, $precision, DateFormatter::LOCALE_EN) . '%';
     }
 
     public function getName(): string

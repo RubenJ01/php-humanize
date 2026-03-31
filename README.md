@@ -70,6 +70,25 @@ echo $humanizer->joinList(['A', 'B']);      // A or B
 echo $humanizer->truncate('long text', 5); // lo...
 ```
 
+### Intl-powered formatting
+
+As of v3, `ext-intl` (ICU) is a hard dependency. Built-in number, percentage, and date formatters now rely on ICU locale rules instead of internal locale mapping tables.
+
+```php
+use Rjds\PhpHumanize\Formatter\DateTime\DateFormatter;
+use Rjds\PhpHumanize\Formatter\Number\NumberFormatter;
+use Rjds\PhpHumanize\Formatter\Number\PercentageFormatter;
+
+$number = new NumberFormatter();        // ICU locale-aware formatting
+$percent = new PercentageFormatter();   // ICU locale-aware formatting
+$date = new DateFormatter();            // ICU locale-aware formatting
+
+// Force English-only fallback behavior:
+$stableNumber = new NumberFormatter(preferIntl: false);
+$stablePercent = new PercentageFormatter(preferIntl: false);
+$stableDate = new DateFormatter(preferIntl: false);
+```
+
 ### Extend with custom formatters
 
 ```php

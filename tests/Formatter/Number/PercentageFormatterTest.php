@@ -27,7 +27,7 @@ class PercentageFormatterTest extends TestCase
             'english locale with region' => [0.5, 0, 'en_US', true, '50%'],
             'dutch separators' => [0.153, 1, 'nl', true, '15,3%'],
             'dutch locale with region' => [0.5, 0, 'nl_NL', true, '50%'],
-            'unsupported locale falls back to english' => [0.153, 1, 'de_DE', true, '15.3%'],
+            'german locale uses intl conventions' => [0.153, 1, 'de_DE', true, '15,3%'],
             'negative values' => [-0.125, 1, 'nl', true, '-12,5%'],
             'large values include grouping' => [1234.56, 2, 'en', false, '1,234.56%'],
         ];
@@ -49,31 +49,11 @@ class PercentageFormatterTest extends TestCase
         self::assertSame('123,456%', $this->formatter->format(1234.56));
     }
 
-    public function testItSupportsInjectedCustomLocaleFormats(): void
+    public function testItUsesEnglishFallbackWhenIntlPreferenceIsDisabled(): void
     {
-        $formatter = new PercentageFormatter([
-            'fr' => [',', ' '],
-        ]);
+        $formatter = new PercentageFormatter(preferIntl: false);
 
-        self::assertSame('12,5%', $formatter->format(0.125, 1, 'fr_FR', true));
-    }
-
-    public function testItAllowsOverridingBuiltInLocaleFormats(): void
-    {
-        $formatter = new PercentageFormatter([
-            'en' => [',', ' '],
-        ]);
-
-        self::assertSame('12,5%', $formatter->format(0.125, 1, 'en', true));
-    }
-
-    public function testItIgnoresInjectedFormatsWithEmptyLocaleKey(): void
-    {
-        $formatter = new PercentageFormatter([
-            '' => [',', ' '],
-        ]);
-
-        self::assertSame('12.5%', $formatter->format(0.125, 1, 'en', true));
+        self::assertSame('12.5%', $formatter->format(0.125, 1, 'nl', true));
     }
 
     public function testItDefaultsToZeroWhenNoArgumentsAreProvided(): void

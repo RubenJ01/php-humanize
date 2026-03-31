@@ -27,7 +27,7 @@ class NumberFormatterTest extends TestCase
             'dutch separators' => [1234567.89, 2, 'nl', '1.234.567,89'],
             'dutch locale with region' => [1234.5, 1, 'nl_NL', '1.234,5'],
             'dutch uppercase locale' => [1234.5, 1, 'NL', '1.234,5'],
-            'unsupported locale falls back to english' => [1234.5, 1, 'de_DE', '1,234.5'],
+            'german locale uses intl conventions' => [1234.5, 1, 'de_DE', '1.234,5'],
             'negative values' => [-1234.56, 2, 'nl', '-1.234,56'],
             'zero precision rounds number' => [1234.5, 0, 'en', '1,235'],
         ];
@@ -48,31 +48,11 @@ class NumberFormatterTest extends TestCase
         self::assertSame('1,235', $this->formatter->format(1234.56));
     }
 
-    public function testItSupportsInjectedCustomLocaleFormats(): void
+    public function testItUsesEnglishFallbackWhenIntlPreferenceIsDisabled(): void
     {
-        $formatter = new NumberFormatter([
-            'fr' => [',', ' '],
-        ]);
+        $formatter = new NumberFormatter(preferIntl: false);
 
-        self::assertSame('1 234,5', $formatter->format(1234.5, 1, 'fr_FR'));
-    }
-
-    public function testItAllowsOverridingBuiltInLocaleFormats(): void
-    {
-        $formatter = new NumberFormatter([
-            'en' => [',', ' '],
-        ]);
-
-        self::assertSame('1 234,5', $formatter->format(1234.5, 1, 'en'));
-    }
-
-    public function testItIgnoresInjectedFormatsWithEmptyLocaleKey(): void
-    {
-        $formatter = new NumberFormatter([
-            '' => [',', ' '],
-        ]);
-
-        self::assertSame('1,234.5', $formatter->format(1234.5, 1, 'en'));
+        self::assertSame('1,234.5', $formatter->format(1234.5, 1, 'nl'));
     }
 
     public function testItDefaultsToZeroWhenNoArgumentsAreProvided(): void
@@ -111,15 +91,5 @@ class NumberFormatterTest extends TestCase
         $this->expectExceptionMessage('Third argument must be a non-empty locale string');
 
         $this->formatter->format(1234, 0, '   ');
-    }
-
-    public function testItAppliesValidOverridesAfterAnEmptyLocaleKey(): void
-    {
-        $formatter = new NumberFormatter([
-            '' => [',', ' '],
-            'fr' => [',', ' '],
-        ]);
-
-        self::assertSame('1 234,5', $formatter->format(1234.5, 1, 'fr'));
     }
 }
