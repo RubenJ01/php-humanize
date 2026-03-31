@@ -45,9 +45,16 @@ class Humanizer implements HumanizerInterface
         ?NumberFormatter $numberFormatter = null,
         ?HumanizerConfig $config = null,
         ?PercentageFormatter $percentageFormatter = null,
+        ?FormatterRegistry $registry = null,
     ) {
-        $this->registry = new FormatterRegistry();
         $this->config = $config ?? new HumanizerConfig();
+
+        if ($registry !== null) {
+            $this->registry = $registry;
+            return;
+        }
+
+        $this->registry = new FormatterRegistry();
 
         // Register formatters - use provided instances or create defaults
         $this->registry->register('fileSize', $fileSizeFormatter ?? new FileSizeFormatter());

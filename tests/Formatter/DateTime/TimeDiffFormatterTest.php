@@ -44,7 +44,8 @@ class TimeDiffFormatterTest extends TestCase
     #[DataProvider('timeDiffProvider')]
     public function testItFormatsTimeDiff(string $modifier, string $expected): void
     {
-        $now = new DateTimeImmutable();
+        // Fixed point in time avoids month-end edge cases for relative month arithmetic.
+        $now = new DateTimeImmutable('2026-03-15 12:00:00+00:00');
         $dateTime = $now->modify($modifier);
 
         self::assertSame($expected, $this->formatter->format($dateTime, $now));
