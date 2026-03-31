@@ -94,4 +94,12 @@ class HumanizerFactoryTest extends TestCase
 
         HumanizerFactory::create(formatters: [0 => $formatter]);
     }
+
+    public function testFactoryThrowsForInvalidFormatterInstance(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Formatter for "fileSize" must implement');
+
+        HumanizerFactory::create(formatters: ['fileSize' => 'invalid']);
+    }
 }
