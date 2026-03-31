@@ -38,7 +38,6 @@ class HumanizerFactoryTest extends TestCase
             $names
         );
     }
-
     public function testFactoryCreatesHumanizerWithDefaults(): void
     {
         $humanizer = HumanizerFactory::create();
@@ -94,5 +93,13 @@ class HumanizerFactoryTest extends TestCase
         $this->expectExceptionMessage('Formatter name must be a non-empty string.');
 
         HumanizerFactory::create(formatters: [0 => $formatter]);
+    }
+
+    public function testFactoryThrowsForInvalidFormatterInstance(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Formatter for "fileSize" must implement');
+
+        HumanizerFactory::create(formatters: ['fileSize' => 'invalid']);
     }
 }
