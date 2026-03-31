@@ -12,6 +12,33 @@ use Rjds\PhpHumanize\HumanizerFactory;
 
 class HumanizerFactoryTest extends TestCase
 {
+    public function testFactoryRegistersAllBuiltInFormatters(): void
+    {
+        $humanizer = HumanizerFactory::create();
+
+        $names = $humanizer->getRegistry()->getNames();
+        sort($names);
+
+        self::assertSame(
+            [
+                'abbreviate',
+                'dataRate',
+                'diffForHumans',
+                'duration',
+                'fileSize',
+                'joinList',
+                'number',
+                'ordinal',
+                'percentage',
+                'pluralize',
+                'readableDate',
+                'toWords',
+                'truncate',
+            ],
+            $names
+        );
+    }
+
     public function testFactoryCreatesHumanizerWithDefaults(): void
     {
         $humanizer = HumanizerFactory::create();
