@@ -89,38 +89,9 @@ $stablePercent = new PercentageFormatter(preferIntl: false);
 $stableDate = new DateFormatter(preferIntl: false);
 ```
 
-## Upgrade to v3
+## Migrations
 
-v3 introduces breaking changes around localization and deprecated APIs.
-
-- `ext-intl` is now required.
-- `Rjds\PhpHumanize\Formatter\DateTime\DateLocalizedFormatter` was removed; use `DateFormatter`.
-- `NumberFormatter` constructor changed from `__construct(array $localeFormats = [])` to `__construct(bool $preferIntl = true)`.
-- `PercentageFormatter` constructor changed from `__construct(array $localeFormats = [])` to `__construct(bool $preferIntl = true)`.
-
-Before:
-
-```php
-use Rjds\PhpHumanize\Formatter\DateTime\DateLocalizedFormatter;
-use Rjds\PhpHumanize\Formatter\Number\NumberFormatter;
-use Rjds\PhpHumanize\Formatter\Number\PercentageFormatter;
-
-$date = new DateLocalizedFormatter();
-$number = new NumberFormatter(['fr' => [',', ' ']]);
-$percent = new PercentageFormatter(['fr' => [',', ' ']]);
-```
-
-After:
-
-```php
-use Rjds\PhpHumanize\Formatter\DateTime\DateFormatter;
-use Rjds\PhpHumanize\Formatter\Number\NumberFormatter;
-use Rjds\PhpHumanize\Formatter\Number\PercentageFormatter;
-
-$date = new DateFormatter();
-$number = new NumberFormatter(); // ICU locale-aware
-$percent = new PercentageFormatter(); // ICU locale-aware
-```
+See the migration guide: [MIGRATION.md](MIGRATION.md).
 
 ### Extend with custom formatters
 
