@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.0](https://github.com/RubenJ01/php-humanize/compare/v2.4.0...v3.0.0) (2026-03-31)
+
+
+### ⚠ BREAKING CHANGES
+
+* migrate v3 to intl-only locale strategy ([#52](https://github.com/RubenJ01/php-humanize/issues/52))
+
+### Features
+
+* migrate v3 to intl-only locale strategy ([#52](https://github.com/RubenJ01/php-humanize/issues/52)) ([1a7764b](https://github.com/RubenJ01/php-humanize/commit/1a7764b2b61ee95b559071fbfdfbcf1cf176422c))
+
 ## [2.4.0](https://github.com/RubenJ01/php-humanize/compare/v2.3.0...v2.4.0) (2026-03-31)
 
 
