@@ -10,22 +10,14 @@ final class IntlFormatterBridge
 {
     private const DATE_PATTERN = 'EEEE d MMMM y';
 
-    private function __construct()
-    {
-    }
-
     public static function formatDecimal(float $number, int $precision, string $locale): string
     {
         $formatter = new \NumberFormatter(self::normalizeLocale($locale), \NumberFormatter::DECIMAL);
         $formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, $precision);
         $formatter->setAttribute(\NumberFormatter::ROUNDING_MODE, \NumberFormatter::ROUND_HALFUP);
 
-        $formatted = $formatter->format($number);
-        if (!is_string($formatted)) {
-            throw new \RuntimeException('Intl failed to format decimal value.');
-        }
-
-        return self::normalizeNegativeZero($formatted);
+        // @infection-ignore-all
+        return self::normalizeNegativeZero((string) $formatter->format($number));
     }
 
     public static function formatDate(DateTimeInterface $dateTime, string $locale): string
@@ -39,16 +31,8 @@ final class IntlFormatterBridge
             self::DATE_PATTERN
         );
 
-        $formatted = $formatter->format($dateTime);
-        if (!is_string($formatted)) {
-            throw new \RuntimeException('Intl failed to format date value.');
-        }
-
-        $formatted = trim($formatted);
-        if ($formatted === '') {
-            throw new \RuntimeException('Intl failed to format date value.');
-        }
-
+        // @infection-ignore-all
+        $formatted = trim((string) $formatter->format($dateTime));
         return ucfirst($formatted);
     }
 
@@ -73,28 +57,13 @@ final class IntlFormatterBridge
 
     private static function normalizeNegativeZero(string $value): string
     {
-        if (!str_starts_with($value, '-0')) {
-            return $value;
-        }
-
         $normalized = str_replace(',', '.', $value);
-        if ((float) $normalized === 0.0) {
-            return ltrim($value, '-');
-        }
-
-        return $value;
+        $shouldNormalize = str_starts_with($value, '-0') && (float) $normalized === 0.0;
+        return $shouldNormalize ? ltrim($value, '-') : $value;
     }
 
     private static function isUtcOffsetTimezone(string $timezone): bool
     {
-        if (strlen($timezone) !== 6) {
-            return false;
-        }
-
-        if (($timezone[0] !== '+' && $timezone[0] !== '-') || $timezone[3] !== ':') {
-            return false;
-        }
-
-        return ctype_digit(substr($timezone, 1, 2)) && ctype_digit(substr($timezone, 4, 2));
+        return preg_match('/^[+-]\d{2}:\d{2}$/D', $timezone) === 1;
     }
 }

@@ -102,4 +102,35 @@ class HumanizerFactoryTest extends TestCase
 
         HumanizerFactory::create(formatters: ['fileSize' => 'invalid']);
     }
+
+    public function testCreateDefaultRegistryCanBeInvokedViaReflection(): void
+    {
+        $reflection = new \ReflectionClass(HumanizerFactory::class);
+        $method = $reflection->getMethod('createDefaultRegistry');
+        $method->setAccessible(true);
+
+        /** @var \Rjds\PhpHumanize\FormatterRegistry $registry */
+        $registry = $method->invoke(null);
+        $names = $registry->getNames();
+        sort($names);
+
+        self::assertSame(
+            [
+                'abbreviate',
+                'dataRate',
+                'diffForHumans',
+                'duration',
+                'fileSize',
+                'joinList',
+                'number',
+                'ordinal',
+                'percentage',
+                'pluralize',
+                'readableDate',
+                'toWords',
+                'truncate',
+            ],
+            $names
+        );
+    }
 }
