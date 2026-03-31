@@ -63,6 +63,7 @@ jobs:
                 id: bc
                 continue-on-error: true
                 run: |
+                  set -o pipefail
                   docker run --rm -v "$GITHUB_WORKSPACE:/app" -w /app nyholm/roave-bc-check:latest roave-backwards-compatibility-check:assert-backwards-compatible --from=origin/${{ github.base_ref || 'main' }} --format=github-actions 2>&1 | tee bc-check.log
 
             -   name: Comment on BC check failure
