@@ -89,10 +89,6 @@ $stablePercent = new PercentageFormatter(preferIntl: false);
 $stableDate = new DateFormatter(preferIntl: false);
 ```
 
-## Migrations
-
-See the migration guide: [MIGRATION.md](MIGRATION.md).
-
 ### Extend with custom formatters
 
 ```php
@@ -132,6 +128,10 @@ php vendor/bin/infection --threads=4
 ## Contributing
 
 Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines, local quality checks, and pull request workflow.
+
+## Migrations
+
+See the migration guide: [MIGRATION.md](MIGRATION.md).
 
 ## License
 
