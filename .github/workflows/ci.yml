@@ -68,7 +68,7 @@ jobs:
 
             -   name: Comment on BC check failure
                 if: steps.bc.outcome == 'failure'
-                uses: marocchino/sticky-pull-request-comment@v2
+                uses: marocchino/sticky-pull-request-comment@v3
                 with:
                     header: backward-compatibility-check
                     message: |
