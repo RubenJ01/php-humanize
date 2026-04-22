@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.0](https://github.com/RubenJ01/php-humanize/compare/v3.0.0...v3.1.0) (2026-04-22)
+
+
+### Features
+
+* normalize locale aliases across intl formatters ([#62](https://github.com/RubenJ01/php-humanize/issues/62)) ([06a5e40](https://github.com/RubenJ01/php-humanize/commit/06a5e409243796f3f9ff6a0d78d5f0b8b7c6129d))
+
 ## [3.0.0](https://github.com/RubenJ01/php-humanize/compare/v2.4.0...v3.0.0) (2026-03-31)
 
 
