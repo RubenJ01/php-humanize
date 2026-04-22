@@ -28,6 +28,11 @@ class DateFormatterTest extends TestCase
                 'Donderdag 17 februari 2022'
             ],
             'dutch locale with region' => ['2026-03-30 12:00:00+00:00', 'nl_NL', 'Maandag 30 maart 2026'],
+            'dutch locale alias with hyphen and mixed case' => [
+                '2026-03-30 12:00:00+00:00',
+                'NL-nl',
+                'Maandag 30 maart 2026'
+            ],
             'dutch uppercase locale' => ['2026-03-30 12:00:00+00:00', 'NL', 'Maandag 30 maart 2026'],
             'english leap day' => [
                 '2024-02-29 12:00:00+00:00',
