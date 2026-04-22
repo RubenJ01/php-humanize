@@ -5,6 +5,7 @@ namespace Rjds\PhpHumanize\Formatter\Intl;
 use DateTimeInterface;
 use DateTimeZone;
 use IntlDateFormatter;
+use Rjds\PhpHumanize\Locale\LocaleNormalizer;
 
 final class IntlFormatterBridge
 {
@@ -38,12 +39,7 @@ final class IntlFormatterBridge
 
     private static function normalizeLocale(string $locale): string
     {
-        $normalized = trim($locale);
-        if ($normalized === '') {
-            return 'en';
-        }
-
-        return $normalized;
+        return LocaleNormalizer::normalizeOrDefault($locale, 'en');
     }
 
     private static function normalizeTimezone(string $timezone): string

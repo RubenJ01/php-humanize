@@ -3,6 +3,7 @@
 namespace Rjds\PhpHumanize;
 
 use InvalidArgumentException;
+use Rjds\PhpHumanize\Locale\LocaleNormalizer;
 
 final class HumanizerConfig
 {
@@ -17,7 +18,7 @@ final class HumanizerConfig
         private string $listConjunction = self::DEFAULT_LIST_CONJUNCTION,
         private string $truncateSuffix = self::DEFAULT_TRUNCATE_SUFFIX,
     ) {
-        $this->locale = self::normalizeRequiredString($this->locale, 'locale');
+        $this->locale = LocaleNormalizer::normalizeRequired($this->locale, 'locale');
         $this->numberPrecision = self::normalizePrecision($this->numberPrecision);
         $this->listConjunction = self::normalizeRequiredString($this->listConjunction, 'listConjunction');
     }

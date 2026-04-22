@@ -40,6 +40,21 @@ class HumanizerConfigTest extends TestCase
         self::assertSame('...', $updated->getTruncateSuffix());
     }
 
+    public function testItNormalizesLocaleAliases(): void
+    {
+        $config = new HumanizerConfig(locale: ' EN_us ');
+
+        self::assertSame('en-US', $config->getLocale());
+        self::assertSame('nl-NL', $config->withLocale('nl_nl')->getLocale());
+    }
+
+    public function testItTrimsListConjunction(): void
+    {
+        $config = new HumanizerConfig(listConjunction: '  or  ');
+
+        self::assertSame('or', $config->getListConjunction());
+    }
+
     public function testItRejectsEmptyLocale(): void
     {
         $this->expectException(InvalidArgumentException::class);

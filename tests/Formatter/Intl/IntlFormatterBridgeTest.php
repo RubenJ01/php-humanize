@@ -73,9 +73,9 @@ class IntlFormatterBridgeTest extends TestCase
         self::assertSame('en', $this->invokePrivate('normalizeLocale', '   '));
     }
 
-    public function testNormalizeLocaleKeepsUnderscoreLocale(): void
+    public function testNormalizeLocaleCanonicalizesLocaleAlias(): void
     {
-        self::assertSame('nl_NL', $this->invokePrivate('normalizeLocale', 'nl_NL'));
+        self::assertSame('nl-NL', $this->invokePrivate('normalizeLocale', 'nl_NL'));
     }
 
     public function testNormalizeTimezoneReturnsUtcForSignedOffset(): void
@@ -135,7 +135,7 @@ class IntlFormatterBridgeTest extends TestCase
                 parent::__construct($dateTime);
             }
 
-            public function getTimezone(): DateTimeZone|false
+            public function getTimezone(): DateTimeZone
             {
                 return $this->timezone;
             }

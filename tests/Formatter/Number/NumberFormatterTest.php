@@ -24,6 +24,7 @@ class NumberFormatterTest extends TestCase
         return [
             'english default separators' => [1234567.89, 2, 'en', '1,234,567.89'],
             'english locale with region' => [1234.5, 1, 'en_US', '1,234.5'],
+            'english locale alias with hyphen and mixed case' => [1234.5, 1, 'EN-us', '1,234.5'],
             'dutch separators' => [1234567.89, 2, 'nl', '1.234.567,89'],
             'dutch locale with region' => [1234.5, 1, 'nl_NL', '1.234,5'],
             'dutch uppercase locale' => [1234.5, 1, 'NL', '1.234,5'],
